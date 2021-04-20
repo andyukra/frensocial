@@ -19,6 +19,7 @@
 </script>
 
 <div class="app">
+
     <Nav data={{auth, user}}/>
 
     <slot></slot>

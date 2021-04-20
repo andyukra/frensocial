@@ -2,6 +2,7 @@
     import { onDestroy } from 'svelte';
     import { publicaciones, usuarios } from "$lib/store";
     import TarjetaPub from '$lib/components/TarjetaPub.svelte';
+    import Loader from '$lib/components/Loader.svelte';
 
     let data, data2;
 
@@ -14,8 +15,10 @@
 <section>
     {#if data}
          {#each data as item}
-              <TarjetaPub data={{item, avatar: data2.filter(x=>item.author === x.username)}}/>
+            <TarjetaPub data={{item, avatar: data2.filter(x=>item.author === x.username)}}/>
          {/each}
+    {:else}
+            <Loader/>
     {/if}
 </section>
 
