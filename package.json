@@ -28,7 +28,7 @@
 	"dependencies": {
 		"cookie": "^0.4.1",
 		"moment": "^2.29.1",
-		"mongoose": "^5.12.3",
+		"mongoose": "raphaelschwinger/mongoose#fix-import",
 		"string-hash": "^1.1.3"
 	}
 }
