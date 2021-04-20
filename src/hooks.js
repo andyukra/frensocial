@@ -1,9 +1,11 @@
-import * as cookie from 'cookie';
+import cookie from 'cookie';
 import db from '$lib/db';
 import users from '$lib/users';
 
+const {parse} = cookie;
+
 export async function getContext({headers}) {
-    const cookies = cookie.parse(headers.cookie || '');
+    const cookies = parse(headers.cookie || '');
 
     if(!cookies.sessionID) {
         return {
