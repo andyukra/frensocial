@@ -1,0 +1,118 @@
+<script context="module">
+    export async function load({page, session, fetch}) {
+
+        const res = await fetch(`/getUser?key=${page.params.key}`);
+        let user;
+
+        if(!res.ok) {
+            return {
+                status: 404
+            }
+        } 
+
+        user = await res.json();
+
+        if(!session.authenticated) {
+            return {
+                props: {auth: ![], user: user.usuario}
+            }
+        }
+
+        if(page.params.key !== session.user) {
+            return {
+                props: {auth: ![], user: user.usuario}
+            }
+        }
+
+        return {
+            props: {auth: true, user: user.usuario}
+        }
+    }
+</script>
+
+<script>
+    export let auth;
+    export let user;
+    
+    let files;
+
+    const changeAvatar = () => {
+        if(!auth) return null;
+        if(files[0].size > 5000000) {
+            alert('La imágen es muy pesada');
+            return null;
+        }
+        if(!/img|png|jpeg|gif/.test(files[0].type)) {
+                alert('El Archivo debe ser una imágen');
+                return null;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            fetch('/changeAvatar', {
+                method: 'POST',
+                body: JSON.stringify({
+                    image: reader.result
+                })
+            })
+                .then(response => response.text())
+                .then(result => {
+                    const {message} = JSON.parse(result);
+                    if(message === 'success') {
+                        location.href = location.href;
+                    }
+                })
+                .catch(err => console.error(err));
+        };
+        reader.readAsDataURL(files[0]);
+    }
+</script>
+
+<section>
+    <div class="perfil">
+        <div class="imgBox">
+            {#if auth}
+                <input type="file" bind:files on:change={changeAvatar} id="changeAvatar" hidden>
+            {/if}
+            <label for="changeAvatar">
+                {#if user?.avatar}
+                    <img src={user.avatar} alt="Avatar Perfil">
+                {:else}
+                    <i class="fa fa-user-circle"></i>
+                {/if}
+            </label>
+            <h2>{user?.username}</h2>
+            <p>{user?.email}</p>
+        </div>
+    </div>
+</section>
+
+<style lang="sass">
+    section
+        width: 100%
+        .perfil
+            margin: 2rem 0
+            padding: 1rem
+            background: white
+            border-radius: 1.3rem
+            box-shadow: 0 4px 32px 0 rgba(0,0,0,.1)
+            .imgBox
+                width: 100%
+                display: flex
+                flex-direction: column
+                align-items: center
+                justify-content: center
+                position: relative
+                i
+                    font-size: 10rem
+                    cursor: pointer
+                label
+                    img
+                        object-fit: cover
+                        width: 10rem
+                        height: 10rem
+                        border-radius: 50%
+                        cursor: pointer
+                        box-shadow: 0 2px 10px 0 rgba(0,0,0,.3)
+                h2
+                    margin: 1rem 0
+</style>

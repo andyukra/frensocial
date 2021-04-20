@@ -1,0 +1,314 @@
+<script context='module'>
+    import { publicaciones, usuarios } from '$lib/store';
+
+    export async function load({page, fetch, session}) {
+        let data, search, allUsers, search2, allUsersParsed;
+
+        publicaciones.subscribe( val => data = val);
+        usuarios.subscribe( val => allUsers = val);
+
+        if(data || allUsers) {
+            search = data.filter(x => x._id === page.params.key);
+            allUsersParsed = await allUsers.reduce((acc, i) => ({
+                ...acc,
+                [i.username]: i.avatar
+            }), {});
+            return {
+                status: 200,
+                props: {
+                    data: search,
+                    user: session.user ? session.user : '',
+                    avatars: allUsersParsed
+                }
+            }
+        }
+
+        const res = await fetch(`/searchPublication?key=${page.params.key}`);
+        if(!res.ok){
+            return {
+                status: 302,
+                redirect: '/publicationNotFound'
+            }
+        }
+        search = await res.json();
+        const res2 = await fetch('/getUser?key=all');
+        if(res2.ok) {
+            allUsers = await res2.json();
+            allUsersParsed = await allUsers.usuarios.reduce((acc, i) => ({
+                ...acc,
+                [i.username]: i.avatar
+            }), {});
+        }
+        return {
+            status: 200,
+            props: {
+                data: [{...search.search}],
+                user: session.user ? session.user : '',
+                avatars: allUsersParsed
+            }
+        }
+
+    }
+</script>
+
+<script>
+    export let data, user, avatars;
+    import {goto} from '$app/navigation';
+    import moment from 'moment';
+
+    let comment;
+
+    const postComment = () => {
+        if(!user) return null;
+        if(comment.length > 100) {
+            alert('El comentario es demasiado largo');
+            return null;
+        }
+        fetch('/postComment', {
+            method: 'POST',
+            body: JSON.stringify({comment : comment.trim(), id: data[0]._id})
+        })
+            .then(response => response.text())
+            .then(result => {
+                const {message} = JSON.parse(result);
+                if(message === 'success') {
+                    location.href = `/publications/${data[0]._id}`;
+                }
+            });
+    }
+
+    const postLikeOrDislike = (type) => {
+        if(!user) return null;
+        fetch(`/likes?id=${data[0]._id}&type=${type}`)
+            .then(response => response.text())
+            .then(result => {
+                const {message} = JSON.parse(result);
+                if(message === 'success'){
+                    const who = document.querySelector(`.${type}`);
+                    who.style.color = '#6C63FF';
+                    who.childNodes[2].textContent = parseInt(who.childNodes[2].textContent) + 1;
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+</script>
+
+<section>
+    <div class="header">
+        <div class="author">
+            {#if avatars}
+                 {#if avatars[data[0].author]}
+                    <img src={avatars[data[0].author]} on:click={()=>goto(`/perfil/${data[0].author}`)} alt="avatar author">
+                 {/if}
+            {:else}
+                <i class="fa fa-user-circle" on:click={()=>goto(`/perfil/${data[0].author}`)}></i>
+            {/if}
+            <div class="authorText">
+                <h4>{data[0].author.replace(/\"/g, '')}</h4>
+                <p>{moment(data[0].time).fromNow()}</p>
+            </div>
+        </div>
+        <div class="likesBox">
+            <div class="groupLike likes">
+                {#if user}
+                    <i class="far fa-thumbs-up" on:click={() => postLikeOrDislike('likes')}></i>
+                {:else}
+                    <i class="far fa-thumbs-up"></i>
+                {/if}
+                <span>{data[0].likes}</span>
+            </div>
+            <div class="groupLike dislikes">
+                {#if user}
+                    <i class="far fa-thumbs-down" on:click={() => postLikeOrDislike('likes')}></i>
+                {:else}
+                    <i class="far fa-thumbs-down"></i>
+                {/if}
+                <span>{data[0].dislikes}</span>
+            </div>
+        </div>
+    </div>
+    <h1>{data[0].title}</h1>
+    <div class="content">
+        <div class="imgBox">
+           <img src={data[0].image} alt={data[0].title}>
+           <p>{data[0].description}</p>
+        </div>
+        <div class="commentsBox">
+           <h4>Comentarios</h4>
+           <div class="comments">
+               {#if data[0].comments.length !== 0}
+                    {#each data[0].comments as comentario}
+                         <article>
+                             <div class="authorComment">
+                                {#if avatars}
+                                    {#if avatars[comentario.author]}
+                                        <img src={avatars[comentario.author]} on:click={()=>goto(`/perfil/${comentario.author}`)} alt="avatar author">
+                                    {:else}
+                                        <i class="fa fa-user-circle" on:click={()=>goto(`/perfil/${comentario.author}`)}></i>
+                                    {/if}
+                                {:else}
+                                    <i class="fa fa-user-circle" on:click={()=>goto(`/perfil/${comentario.author}`)}></i>
+                                {/if}
+                                <div class="textAuthorComment">
+                                    <h5>{comentario.author}</h5>
+                                    <p>{moment(comentario.time).fromNow()}</p>
+                                </div>
+                             </div>
+                             <p class="commentText">{comentario.text}</p>
+                         </article>
+                    {/each}
+               {:else}
+                    <p style="text-align: center">No hay comentarios</p>
+               {/if}
+           </div>
+           {#if user}
+            <form on:submit|preventDefault={postComment}>
+                <input type="text" placeholder="Comentá" bind:value={comment} required>
+                <button type="submit">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                </button>
+            </form>
+           {/if}
+        </div>
+    </div>
+</section>
+
+<style lang="sass">
+    i
+        cursor: pointer
+    section
+        width: 100%
+        padding: 1.5rem
+        background: white
+        box-shadow: 0 4px 32px 0 rgba(0,0,0,.1)
+        border-radius: 1.5rem
+        margin: 1.1rem 0
+        @media(max-width: 500px)
+            padding: 0.8rem
+        h1
+            text-align: center
+            margin: 0.8rem 0
+            padding: 0.4rem
+            border-radius: 2rem
+            background: #6C63FF
+            width: 100%
+            color: white
+        .header
+            display: flex
+            justify-content: space-between
+            .author
+                display: flex
+                align-items: center
+                i
+                    font-size: 2.5rem
+                    margin-right: 0.7rem
+                img
+                    width: 2.5rem
+                    height: 2.5rem
+                    border-radius: 50%
+                    margin-right: 0.7rem
+                    object-fit: cover
+                    cursor: pointer
+                p
+                    font-size: 0.7rem
+                    color: #777
+            .likesBox
+                display: flex
+                .groupLike
+                    display: flex
+                    align-items: center
+                    margin: 0 1rem
+                    i
+                        font-size: 2rem
+                    span
+                        font-size: 0.8rem
+                        margin-left: 0.5rem
+                        padding: 0.2rem 0.4rem
+                        background: #6C63FF
+                        color: white
+                        border-radius: 50%
+        .content
+            display: flex
+            @media(max-width: 500px)
+                flex-direction: column
+            .commentsBox
+                flex: 1
+                margin: 0 0.5rem
+                background: #eaeaea
+                padding: 0.7rem
+                border-radius: 1rem
+                display: flex
+                flex-direction: column
+                justify-content: space-between
+                box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
+                @media(max-width: 500px)
+                    margin: 1rem 0
+                form
+                    display: flex
+                    width: 100%
+                    button
+                        padding: 0.5rem
+                        border: none
+                        border-radius: 50%
+                        background: #6C63FF
+                        color: white
+                        box-shadow: 0 0 5px 1px rgba(0,0,0,.3)
+                        &:focus
+                            outline: none
+                    input
+                        width: 100%
+                        border: none
+                        border-bottom: 2px solid #6C63FF
+                        background: transparent
+                        padding: 0.2rem 0
+                        font-family: inherit
+                        &:focus
+                            outline: none
+                h4
+                    text-align: center
+                .comments
+                    overflow-y: auto
+                    max-height: 90vh
+                    margin: 0.8rem 0
+                    padding-right: 0.5rem
+                    article
+                        word-break: break-word
+                        margin: 0.7rem 0
+                        .commentText
+                            font-size: 0.7rem
+                            padding: 0.58rem
+                            background: white
+                            border-radius: 0.7rem
+                            margin: 0.5rem 0
+                        .authorComment
+                            display: flex
+                            align-items: center
+                            img
+                                width: 1.8rem
+                                height: 1.8rem
+                                border-radius: 50%
+                                object-fit: cover
+                                cursor: pointer
+                            i
+                                font-size: 1.8rem
+                            .textAuthorComment
+                                margin-left: 0.7rem
+                                p
+                                    font-size: 0.7rem
+                                    color: #777
+            .imgBox
+                flex: 1.5
+                img
+                    width: 100%
+                    border-radius: 1rem
+                    box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
+                p
+                    padding: 0.8rem
+                    background: #eaeaea
+                    border-radius: 1rem
+                    box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
+                    @media(max-width: 500px)
+                        margin-top: 1rem
+
+</style>

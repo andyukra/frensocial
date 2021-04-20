@@ -1,0 +1,42 @@
+<script context="module">
+    import { publicaciones, usuarios } from "$lib/store";
+
+    export async function load({session, fetch}) {
+        if(!session.authenticated) {
+            return {
+                status: 302,
+                redirect: '/unautorhized'
+            }
+        }
+
+        const res = await fetch('/getPublications?key=all');
+        
+        if(res.ok) {
+            const result = await res.json();
+            publicaciones.set(result.data);
+            const res2 = await fetch('/getUser?key=all');
+            if(res2.ok) {
+                const result2 = await res2.json();
+                usuarios.set(result2.usuarios);
+            }
+                return {
+                    status: 200
+                }
+            } else {
+                return {
+                    status: 409
+                }
+            }
+    }
+
+</script>
+
+<script>
+    import Publicar from '$lib/components/Publicar.svelte';
+    import Publications from '$lib/components/Publications.svelte';
+
+</script>
+
+<Publicar />
+
+<Publications />

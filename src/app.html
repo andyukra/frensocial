@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Frensocial</title>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			body {
+				background: #EEF2FF;
+				min-height: 100vh;
+				width: 100vw;
+				font-family: 'Fredoka One', cursive;
+				overflow-x: hidden;
+			}
+			#svelte {
+				width: 70%;
+				margin: auto;
+			}
+			::-webkit-scrollbar {
+				width: 0.5rem;
+				background: black
+			}
+			::-webkit-scrollbar-thumb {
+				background: #6C63FF;
+				border-radius: 1rem;
+			}
+			@media(max-width: 500px) {
+				#svelte {
+					width: 100%;
+				}
+			}
+		</style>
+		%svelte.head%
+	</head>
+	<body>
+		<div id="svelte">%svelte.body%</div>
+	</body>
+</html>
