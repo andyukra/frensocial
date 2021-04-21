@@ -14,7 +14,7 @@ export async function post({body, context}) {
     const { image, title, description } = JSON.parse(body);
     let newPublication;
 
-    if(/[!@#$%^&*(),.?":{}|<>]/.test(title) || title.length < 3 || title.length > 25 || description?.length > 250) {
+    if(/[#$%^&(){}|<>]/.test(title) || title.length < 3 || title.length > 25 || description?.length > 250) {
         return {
             status: 409,
             body: {

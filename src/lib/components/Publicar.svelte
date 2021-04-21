@@ -31,7 +31,7 @@
                 alert('El Archivo debe ser una imágen');
                 return null;
             }
-            if(title.length > 25 || title.length < 3 || /[!@#$%^&*(),.?":{}|<>]/.test(title)) {
+            if(title.length > 25 || title.length < 3 || /[#$%^&(){}|<>]/.test(title)) {
                 alert('El título contiene caractéres prohibidos');
                 return null;
             }
