@@ -6,11 +6,11 @@
 <style lang="sass">
     .loader
         position: fixed
-        width: 100%
-        height: 100%
+        width: 100vw
+        height: 100vh
         top: 0
         left: 0
-        z-index: 700
+        z-index: 1001
         background: rgba(0,0,0,.9)
         backdrop-filter: blur(5px)
         display: flex

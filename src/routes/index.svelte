@@ -9,25 +9,35 @@
             }
         }
 
-        const res = await fetch('/getPublications?key=all');
+        let pub, usr;
+
+        publicaciones.subscribe(val => pub = val);
+        usuarios.subscribe(val => usr = val);
+
+        if(!pub){
+            const res = await fetch('/getPublications?key=all');
         
-        if(res.ok) {
-            const result = await res.json();
-            publicaciones.set(result.data);
-            const res2 = await fetch('/getUser?key=all');
-            if(res2.ok) {
-                const result2 = await res2.json();
-                usuarios.set(result2.usuarios);
-            }
-                return {
-                    status: 200
+            if(res.ok) {
+                const result = await res.json();
+                publicaciones.set(result.data);
+                const res2 = await fetch('/getUser?key=all');
+                if(res2.ok) {
+                    const result2 = await res2.json();
+                    usuarios.set(result2.usuarios);
                 }
-            } else {
-                return {
-                    status: 409
-                }
+                    return {
+                        status: 200
+                    }
+                } else {
+                    return {
+                        status: 409
+                    }
             }
         }
+            return {
+                status: 200
+            }
+    }
 </script>
 
 <script>
@@ -120,11 +130,10 @@
     section
         display: grid
         grid-template-columns: 1fr 2fr
-        margin: 1.5rem 0
+        margin: 7rem 0 3rem 0
         place-items: center
         @media(max-width: 500px)
             grid-template-columns: 1fr
-            margin: 1rem 0
         .imgBox
             margin-right: 1.5rem
             @media(max-width: 500px)
@@ -166,10 +175,10 @@
                 &:nth-child(1)
                     margin-right: 15px
     .loginModal
-        width: 100vw
-        height: 100vh
+        width: 100%
+        height: 100%
         background: rgba(0,0,0,.7)
-        position: absolute
+        position: fixed
         top: 0
         left: 0
         z-index: 1000

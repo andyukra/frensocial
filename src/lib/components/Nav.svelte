@@ -58,8 +58,9 @@
 
 <style lang="sass">
     nav
-        width: 100%
-        margin: auto
+        position: fixed
+        z-index: 1000
+        width: 70%
         padding: 5px 20px
         background: white
         border-bottom-left-radius: 20px
@@ -68,6 +69,8 @@
         justify-content: space-between
         align-items: center
         box-shadow: 0px 4px 26px -15px rgba(0, 0, 0, .17)
+        @media(max-width: 500px)
+            width: 100%
         a
             text-decoration: none
             color: black
@@ -87,7 +90,7 @@
             &:hover
                 background: rgba(0,0,0,.1)
         #sideNav
-            position: absolute
+            position: fixed
             z-index: 10
             top: 0
             right: -150vw

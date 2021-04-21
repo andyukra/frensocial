@@ -9,24 +9,34 @@
             }
         }
 
-        const res = await fetch('/getPublications?key=all');
+        let pub, usr;
+
+        publicaciones.subscribe(val => pub = val);
+        usuarios.subscribe(val => usr = val);
+
+        if(!pub) {
+            const res = await fetch('/getPublications?key=all');
         
-        if(res.ok) {
-            const result = await res.json();
-            publicaciones.set(result.data);
-            const res2 = await fetch('/getUser?key=all');
-            if(res2.ok) {
-                const result2 = await res2.json();
-                usuarios.set(result2.usuarios);
-            }
-                return {
-                    status: 200
+            if(res.ok) {
+                const result = await res.json();
+                publicaciones.set(result.data);
+                const res2 = await fetch('/getUser?key=all');
+                if(res2.ok) {
+                    const result2 = await res2.json();
+                    usuarios.set(result2.usuarios);
                 }
-            } else {
-                return {
-                    status: 409
-                }
+                    return {
+                        status: 200
+                    }
+                } else {
+                    return {
+                        status: 409
+                    }
             }
+        }
+        return {
+            status: 200
+        }
     }
 
 </script>

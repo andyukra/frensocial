@@ -36,5 +36,5 @@
         border-top-right-radius: 1.5rem
         @media(max-width: 500px)
             grid-template-columns: 1fr
-            margin-top: 3rem 0
+            margin-top: 7rem
 </style>

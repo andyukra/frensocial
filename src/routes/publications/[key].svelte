@@ -120,7 +120,7 @@
             </div>
             <div class="groupLike dislikes">
                 {#if user}
-                    <i class="far fa-thumbs-down" on:click={() => postLikeOrDislike('likes')}></i>
+                    <i class="far fa-thumbs-down" on:click={() => postLikeOrDislike('dislikes')}></i>
                 {:else}
                     <i class="far fa-thumbs-down"></i>
                 {/if}
@@ -183,7 +183,7 @@
         background: white
         box-shadow: 0 4px 32px 0 rgba(0,0,0,.1)
         border-radius: 1.5rem
-        margin: 1.1rem 0
+        margin: 5rem 0 1.1rem 0
         @media(max-width: 500px)
             padding: 0.8rem
         h1

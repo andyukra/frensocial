@@ -98,7 +98,7 @@
 <style lang="sass">
     form
         width: 100%
-        margin: 2rem 0
+        margin: 5rem 0
         padding: 1.5rem
         background: white
         height: 250px
@@ -106,7 +106,6 @@
         display: flex
         flex-direction: column
         justify-content: center
-        align-items: space-around
         box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
         @media(max-width: 500px)
             height: 100%
@@ -176,7 +175,7 @@
             font-size: 0.8rem
             color: white
             box-shadow: 0 4px 15px 1px rgba(0,0,0,.25)
-            margin: auto
+            margin: 1rem auto
             cursor: pointer
             @media(max-width: 500px)
                 width: 95%
