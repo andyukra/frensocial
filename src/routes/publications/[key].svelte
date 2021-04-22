@@ -55,6 +55,7 @@
     export let data, user, avatars;
     import {goto} from '$app/navigation';
     import moment from 'moment';
+    import {onMount} from 'svelte';
 
     let comment;
 
@@ -92,8 +93,24 @@
             .catch(err => console.error(err));
     }
 
+    onMount(() => {
+        const times = document.querySelector('.closeImg');
+        const modal = document.querySelector('.modalImg');
+        const imagen = document.querySelector('.imagen');
+        times.addEventListener('click', e => {
+            modal.style.display = 'none';
+        });
+        imagen.addEventListener('click', e => {
+            modal.style.display = 'flex';
+        });
+    })
+
 </script>
 
+<div class="modalImg">
+    <i class="fa fa-times closeImg" aria-hidden="true"></i>
+    <img src={data[0].image} alt={data[0].title}>
+</div>
 <section>
     <div class="header">
         <div class="author">
@@ -131,7 +148,7 @@
     <h1>{data[0].title}</h1>
     <div class="content">
         <div class="imgBox">
-           <img src={data[0].image} alt={data[0].title}>
+           <img src={data[0].image} class="imagen" alt={data[0].title}>
            <p>{data[0].description}</p>
         </div>
         <div class="commentsBox">
@@ -175,6 +192,38 @@
 </section>
 
 <style lang="sass">
+    .modalImg
+        display: none
+        justify-content: center
+        align-items: center
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        height: 100vh
+        background: rgba(0,0,0,.7)
+        backdrop-filter: blur(7px)
+        z-index: 1200
+        .fa-times
+            position: absolute
+            right: 2rem
+            top: 2rem
+            cursor: pointer
+            font-size: 1.3rem
+            width: 40px
+            height: 40px
+            border-radius: 50%
+            transition: 0.5s
+            display: flex
+            align-items: center
+            justify-content: center
+            color: white
+            z-index: 1201
+            &:hover
+                background: rgba(0,0,0,.1)
+        & > img
+            width: 80%
+            max-height: 90vh
     i
         cursor: pointer
     section
