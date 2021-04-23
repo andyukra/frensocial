@@ -58,9 +58,7 @@
 
 <style lang="sass">
     nav
-        position: fixed
-        z-index: 1000
-        width: 70%
+        width: 100%
         padding: 5px 20px
         background: white
         border-bottom-left-radius: 20px

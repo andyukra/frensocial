@@ -22,59 +22,49 @@
             alert('Elije una imágen por favor');
             return null;
         }
-        try {
-            if(files[0].size > 5000000) {
-                alert('La imágen es muy pesada')
-                return null;
-            }
-            if(!/img|png|jpeg|gif/.test(files[0].type)) {
-                alert('El Archivo debe ser una imágen');
-                return null;
-            }
-            if(title.length > 25 || title.length < 3 || /[#$%^&(){}|<>]/.test(title)) {
-                alert('El título contiene caractéres prohibidos');
-                return null;
-            }
-            const reader = new FileReader();
-            reader.onload = () => {
-                fetch('/publish', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        image: reader.result,
-                        title,
-                        description
-                    })
-                })
-                    .then(response => response.text())
-                    .then(result => {
-                        const {message} = JSON.parse(result);
-                        if(message === 'success') {
-                            location.href = '/home';
-                        }
-                    })
-                    .catch(err => console.error(err));
-                title = ''; description = '';
-            };
-            reader.readAsDataURL(files[0]);
-        } catch (err) {
-            fetch('/publish', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        title,
-                        description
-                    })
-                })
-                    .then(response => response.text())
-                    .then(result => {
-                        const {message} = JSON.parse(result);
-                        if(message === 'success') {
-                            location.href = '/home';
-                        }
-                    })
-                    .catch(err => console.error(err));
-            title = ''; description = '';
+        if(files[0].size > 5000000) {
+            alert('La imágen es muy pesada')
+            return null;
         }
-    }
+        if(!/img|png|jpeg|gif/.test(files[0].type)) {
+            alert('El Archivo debe ser una imágen');
+            return null;
+        }
+        if(title.length > 25 || title.length < 3 || /[#$%^&(){}|<>]/.test(title)) {
+            alert('El título contiene caractéres prohibidos');
+            return null;
+        }
+
+        let form = new FormData();
+        form.set('image', files[0])
+
+        fetch('https://api.imgbb.com/1/upload?key=579f935dc936016e8e8217246bd6d65f', {
+            method: 'POST',
+            body: form
+        })
+            .then(response => response.json())
+            .then(result => {
+                if(result.status === 200) {
+                    fetch('/publish', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            image: result.data.display_url,
+                            title,
+                            description
+                        })
+                    })
+                        .then(response => response.text())
+                        .then(result => {
+                            const {message} = JSON.parse(result);
+                            if(message === 'success') {
+                                location.href = '/home';
+                            }
+                        })
+                        title = ''; description = '';
+                }
+            })
+            .catch(err => console.error(err));
+    } 
 </script>
 
 <form on:submit|preventDefault={publicar}>

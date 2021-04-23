@@ -46,24 +46,32 @@
                 alert('El Archivo debe ser una imágen');
                 return null;
         }
-        const reader = new FileReader();
-        reader.onload = () => {
-            fetch('/changeAvatar', {
-                method: 'POST',
-                body: JSON.stringify({
-                    image: reader.result
-                })
+
+        let form = new FormData();
+        form.set('image', files[0]);
+
+        fetch('https://api.imgbb.com/1/upload?key=579f935dc936016e8e8217246bd6d65f', {
+            method: 'POST',
+            body: form
+        })
+            .then(response => response.json())
+            .then(result => {
+                if(result.status === 200){
+                    fetch('/changeAvatar', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            image: result.data.display_url
+                        })
+                    })
+                        .then(response => response.text())
+                        .then(result => {
+                            const {message} = JSON.parse(result);
+                            if(message === 'success') {
+                                location.href = location.href
+                            }
+                        })
+                }
             })
-                .then(response => response.text())
-                .then(result => {
-                    const {message} = JSON.parse(result);
-                    if(message === 'success') {
-                        location.href = location.href;
-                    }
-                })
-                .catch(err => console.error(err));
-        };
-        reader.readAsDataURL(files[0]);
     }
 </script>
 
