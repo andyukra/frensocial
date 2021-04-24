@@ -132,11 +132,11 @@
         grid-template-columns: 1fr 2fr
         margin: 7rem 0 3rem 0
         place-items: center
-        @media(max-width: 500px)
+        @media(max-width: 800px)
             grid-template-columns: 1fr
         .imgBox
             margin-right: 1.5rem
-            @media(max-width: 500px)
+            @media(max-width: 800px)
                 grid-row-start: 2
                 margin-right: 0
                 display: flex
@@ -144,11 +144,11 @@
                 align-items: center
             img
                 width: 100%
-                @media(max-width: 500px)
+                @media(max-width: 800px)
                     width: 80%
         .textBox
             padding: 10px
-            @media(max-width: 500px)
+            @media(max-width: 800px)
                 text-align: center
             h3
                 margin: 5px 0
@@ -160,7 +160,7 @@
         .btnsBox
             margin: 30px 0
             display: flex
-            @media(max-width: 500px)
+            @media(max-width: 800px)
                 justify-content: center
                 align-items: center
             a

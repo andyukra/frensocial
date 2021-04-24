@@ -233,7 +233,7 @@
         box-shadow: 0 4px 32px 0 rgba(0,0,0,.1)
         border-radius: 1.5rem
         margin: 1.1rem 0 1.1rem 0
-        @media(max-width: 500px)
+        @media(max-width: 800px)
             padding: 0.8rem
         h1
             text-align: center
@@ -279,7 +279,7 @@
                         border-radius: 50%
         .content
             display: flex
-            @media(max-width: 500px)
+            @media(max-width: 800px)
                 flex-direction: column
             .commentsBox
                 flex: 1
@@ -291,7 +291,7 @@
                 flex-direction: column
                 justify-content: space-between
                 box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
-                @media(max-width: 500px)
+                @media(max-width: 800px)
                     margin: 1rem 0
                 form
                     display: flex
@@ -357,7 +357,7 @@
                     background: #eaeaea
                     border-radius: 1rem
                     box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
-                    @media(max-width: 500px)
+                    @media(max-width: 800px)
                         margin-top: 1rem
 
 </style>

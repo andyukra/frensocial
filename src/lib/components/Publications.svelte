@@ -34,7 +34,7 @@
         gap: 1rem
         border-top-left-radius: 1.5rem
         border-top-right-radius: 1.5rem
-        @media(max-width: 500px)
+        @media(max-width: 800px)
             grid-template-columns: 1fr
-            margin-top: 7rem
+            margin-top: 3rem
 </style>

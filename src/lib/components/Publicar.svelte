@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
-    let title, description, files;
+    let title, description, files, preview;
 
     onMount(() => {
         let arrInputs = document.querySelectorAll('.formGroup input');
@@ -65,14 +65,27 @@
             })
             .catch(err => console.error(err));
     } 
+
+    const showPreview = () => {
+        if(!files) return null;
+        const reader = new FileReader();
+        reader.onload = () => {
+            preview = reader.result;
+        }
+        reader.readAsDataURL(files[0]);
+    }
 </script>
 
 <form on:submit|preventDefault={publicar}>
     <h3>Comenzá a publicar!!</h3>
     <div class="content">
-        <input bind:files id="upImg" type="file" style="display:none;" accept="image/*">
+        <input bind:files id="upImg" type="file" on:change={showPreview} style="display:none;" accept="image/*">
         <label for="upImg">
-            <i class="fas fa-image"></i>
+            {#if preview}
+                <img src={preview} alt="preview upload">
+            {:else}
+                <i class="fas fa-image"></i>
+            {/if}
         </label>
         <div class="formBox">
             <div class="formGroup">
@@ -97,8 +110,9 @@
         flex-direction: column
         justify-content: center
         box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
-        @media(max-width: 500px)
-            height: 100%
+        @media(max-width: 800px)
+            margin: 3rem 0 0 0
+            height: 450px
             padding: 1rem
         h3
             text-align: center
@@ -106,9 +120,20 @@
             display: flex
             justify-content: space-around
             align-items: center
-            @media(max-width: 500px)
+            @media(max-width: 800px)
                 flex-direction: column
             label
+                img
+                    width: 8.5rem
+                    cursor: pointer
+                    transition: 0.4s
+                    border-radius: 1rem
+                    @media(max-width: 800px)
+                        margin-top: 1rem
+                    &:hover
+                        transform: rotateZ(-10deg) scale(1.1)
+                        color: rgba(108, 99, 255, 1)
+                        text-shadow: 0 0 5px rgba(0,0,0,.2)
                 i
                     font-size: 8.5rem
                     color: rgba(108, 99, 255, .8)
@@ -122,7 +147,7 @@
                 display: flex
                 flex-direction: column
                 width: 70%
-                @media(max-width: 500px)
+                @media(max-width: 800px)
                     width: 90%
                 textarea
                         resize: none
@@ -167,8 +192,12 @@
             box-shadow: 0 4px 15px 1px rgba(0,0,0,.25)
             margin: 1rem auto
             cursor: pointer
-            @media(max-width: 500px)
+            transition: 0.4s ease
+            @media(max-width: 800px)
                 width: 95%
             &:focus
                             outline: none
+            &:hover
+                transform: scale(1.02)
+                background: darken(#6C63FF, 70%)
 </style>

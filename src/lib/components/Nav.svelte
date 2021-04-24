@@ -67,7 +67,7 @@
         justify-content: space-between
         align-items: center
         box-shadow: 0px 4px 26px -15px rgba(0, 0, 0, .17)
-        @media(max-width: 500px)
+        @media(max-width: 800px)
             width: 100%
         a
             text-decoration: none

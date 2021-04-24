@@ -82,17 +82,17 @@
         border-radius: 30px
         box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
         padding: 3rem
-        @media(max-width: 500px)
+        @media(max-width: 800px)
             padding: 1rem
         .imgBox
             width: 50%
-            @media(max-width: 500px)
+            @media(max-width: 800px)
                 display: none
             img
                 width: 80%
         form
             width: 40%
-            @media(max-width: 500px)
+            @media(max-width: 800px)
                 width: 90%
             h3
                 text-align: center
