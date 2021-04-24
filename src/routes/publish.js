@@ -22,6 +22,14 @@ export async function post({ body, context }) {
             }
         }
     }
+    if (!/\.png|\.jpg|\.jpeg/.test(image)) {
+        return {
+            status: 409,
+            body: {
+                message: 'BadImageFormat'
+            }
+        }
+    }
 
     if (image) {
         newPublication = new publications({ image, title, description: description ? description : '', author: context.user });

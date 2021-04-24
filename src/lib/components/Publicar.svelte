@@ -26,7 +26,7 @@
             alert('La imágen es muy pesada')
             return null;
         }
-        if(!/img|png|jpeg|gif/.test(files[0].type)) {
+        if(!/jpg|png|jpeg/.test(files[0].type)) {
             alert('El Archivo debe ser una imágen');
             return null;
         }
