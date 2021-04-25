@@ -3,11 +3,17 @@
     import { publicaciones, usuarios } from "$lib/store";
     import TarjetaPub from '$lib/components/TarjetaPub.svelte';
     import Loader from '$lib/components/Loader.svelte';
+    export let user;
 
-    let data, data2;
+    let data, data2, unsubscribe1, unsubscribe2;
 
-    const unsubscribe1 = publicaciones.subscribe(val => data = val);
-    const unsubscribe2 = usuarios.subscribe(val => data2 = val);
+    if(user){
+        unsubscribe1 = publicaciones.subscribe(val => data = val.filter(x => user === x.author));      
+    } else {
+        unsubscribe1 = publicaciones.subscribe(val => data = val);
+    }
+    
+    unsubscribe2 = usuarios.subscribe(val => data2 = val);
 
     onDestroy(unsubscribe1, unsubscribe2);
 </script>

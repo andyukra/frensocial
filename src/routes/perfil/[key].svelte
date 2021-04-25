@@ -31,12 +31,10 @@
             publications = await res2.json();
             allUsers = await res3.json();
 
-            publications = await publications.data.filter(x => x.author === user.usuario.username);
-
-            publicaciones.set(publications);
+            publicaciones.set(publications.data);
             usuarios.set(allUsers.usuarios);
 
-        }
+        } 
 
         if(!session.authenticated) {
             return {
@@ -60,7 +58,7 @@
     export let auth;
     export let user;
     import Publications from "$lib/components/Publications.svelte";
-    
+
     let files;
 
     const changeAvatar = () => {
@@ -123,7 +121,7 @@
 
 <h2 class="myPublicationsText">Mis publicaciones</h2>
 
-<Publications/>
+<Publications user={user?.username}/>
 
 <style lang="sass">
     .myPublicationsText
