@@ -101,7 +101,7 @@
 <style lang="sass">
     form
         width: 100%
-        margin: 5rem 0
+        margin: 2rem 0
         padding: 1.5rem
         background: white
         height: 250px

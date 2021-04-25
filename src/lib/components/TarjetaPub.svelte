@@ -5,7 +5,7 @@
     const {item, avatar} = data;
 
     const openPublication = e => { 
-        goto(`publications/${e.target.dataset.key}`)
+        goto(`/publications/${e.target.dataset.key}`)
      }
 </script>
 

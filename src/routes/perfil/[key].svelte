@@ -1,8 +1,9 @@
 <script context="module">
+    import { publicaciones, usuarios } from "$lib/store";
+
     export async function load({page, session, fetch}) {
 
         const res = await fetch(`/getUser?key=${page.params.key}`);
-        let user;
 
         if(!res.ok) {
             return {
@@ -10,7 +11,32 @@
             }
         } 
 
+        let user, publications, allUsers;
+
         user = await res.json();
+
+        publicaciones.subscribe(val => publications = val);
+        usuarios.subscribe(val => allUsers = val);
+
+        if(!publications) {
+            const res2 = await fetch('/getPublications');
+            const res3 = await fetch('/getUser?key=all');
+
+            if(!res2.ok || !res3.ok) {
+                return {
+                    status: 404
+                }
+            }
+
+            publications = await res2.json();
+            allUsers = await res3.json();
+
+            publications = await publications.data.filter(x => x.author === user.usuario.username);
+
+            publicaciones.set(publications);
+            usuarios.set(allUsers.usuarios);
+
+        }
 
         if(!session.authenticated) {
             return {
@@ -33,6 +59,7 @@
 <script>
     export let auth;
     export let user;
+    import Publications from "$lib/components/Publications.svelte";
     
     let files;
 
@@ -94,7 +121,14 @@
     </div>
 </section>
 
+<h2 class="myPublicationsText">Mis publicaciones</h2>
+
+<Publications/>
+
 <style lang="sass">
+    .myPublicationsText
+        text-align: center
+        margin: 1rem 0
     section
         width: 100%
         .perfil
