@@ -42,11 +42,17 @@
 </script>
 
 <script>
-    import Publicar from '$lib/components/Publicar.svelte';
     import Publications from '$lib/components/Publications.svelte';
+    import Sections from "$lib/components/Sections.svelte";
 
 </script>
 
-<Publicar />
+<div class="home">
+    <Sections/>
+    <Publications />
+</div>
 
-<Publications />
+<style lang="sass">
+    .home
+        margin-top: 4rem
+</style>

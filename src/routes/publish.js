@@ -11,10 +11,10 @@ export async function post({ body, context }) {
         }
     }
 
-    const { image, title, description } = JSON.parse(body);
+    const { image, type, description } = JSON.parse(body);
     let newPublication;
 
-    if (/[#$%^&(){}|<>]/.test(title) || title.length < 3 || title.length > 25 || description?.length > 250) {
+    if (!description || /[&{}|<>]/.test(description) || description.length > 250) {
         return {
             status: 409,
             body: {
@@ -22,19 +22,21 @@ export async function post({ body, context }) {
             }
         }
     }
-    if (!/\.png|\.jpg|\.jpeg/.test(image)) {
-        return {
-            status: 409,
-            body: {
-                message: 'BadImageFormat'
+    if(image){
+        if (!/\.png$|\.jpg$|\.jpeg$/.test(image)) {
+            return {
+                status: 409,
+                body: {
+                    message: 'BadImageFormat'
+                }
             }
         }
     }
 
     if (image) {
-        newPublication = new publications({ image, title, description: description ? description : '', author: context.user });
+        newPublication = new publications({ image, type, description, author: context.user });
     } else {
-        newPublication = new publications({ title, description: description ? description : '', author: context.user });
+        newPublication = new publications({ type, description, author: context.user });
     }
 
     const published = await newPublication.save();

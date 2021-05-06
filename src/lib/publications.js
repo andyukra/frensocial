@@ -19,17 +19,16 @@ const comments = new Schema({
 const publication = new Schema({
     image: {
         type: String,
-        required: true
-    },
-    title: {
-        type: String,
-        maxlength: 25,
-        minlength: 3,
-        required: true
+        default: ''
     },
     description: {
         type: String,
-        maxlength: 250
+        maxlength: 250,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
     },
     time : {
         type: Date,

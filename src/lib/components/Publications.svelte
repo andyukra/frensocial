@@ -21,7 +21,7 @@
 <section>
     {#if data}
          {#each data as item}
-            <TarjetaPub data={{item, avatar: data2.filter(x=>item.author === x.username)}}/>
+            <TarjetaPub data={{item, avatar: data2.filter(x=>item.author === x.username)[0].avatar}}/>
          {/each}
     {:else}
             <Loader/>
@@ -30,17 +30,10 @@
 
 <style lang="sass">
     section
-        width: 100%
+        width: 50%
+        margin: auto
         padding: 1rem
         background: white
         box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
-        display: grid
-        grid-template-columns: 1fr 1fr
-        place-items: center
-        gap: 1rem
-        border-top-left-radius: 1.5rem
-        border-top-right-radius: 1.5rem
-        @media(max-width: 800px)
-            grid-template-columns: 1fr
-            margin-top: 3rem
+        border-radius: 1.5rem
 </style>

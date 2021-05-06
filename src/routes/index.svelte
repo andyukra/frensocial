@@ -14,7 +14,7 @@
         publicaciones.subscribe(val => pub = val);
         usuarios.subscribe(val => usr = val);
 
-        if(!pub){
+        if(!pub || !usr){
             const res = await fetch('/getPublications?key=all');
         
             if(res.ok) {
@@ -45,6 +45,7 @@
     import { onMount } from 'svelte';
 
     let username, password;
+
 
     const login = () => {
         if(/[!@#$%^&*(),.?":{}|<>]/.test(username) || /[!@#$%^&*(),.?":{}|<>]/.test(password)) return;
@@ -128,9 +129,10 @@
 
 <style lang="sass">
     section
+        width: 70%
         display: grid
         grid-template-columns: 1fr 2fr
-        margin: 7rem 0 3rem 0
+        margin: 2rem auto
         place-items: center
         @media(max-width: 800px)
             grid-template-columns: 1fr

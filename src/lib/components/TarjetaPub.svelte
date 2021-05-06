@@ -1,5 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
+    import moment from 'moment';
     export let data;
 
     const {item, avatar} = data;
@@ -9,26 +10,36 @@
      }
 </script>
 
-<article style={item.image ? `background: url(${item.image}) no-repeat center center/cover` : ``}>
-    {#if avatar}
-         {#if avatar[0].avatar}
-                <img src={avatar[0].avatar} on:click={()=>goto(`/perfil/${item.author}`)} alt="avatar img">
-         {:else}
-                <i class="fas fa-user-circle" on:click={()=>goto(`/perfil/${item.author}`)}></i>
-         {/if}
-    {:else}
-         <i class="fas fa-user-circle" on:click={()=>goto(`/perfil/${item.author}`)}></i>
-    {/if}
-    <h2>{item.title}</h2>
-    <div class="elementsBox">
-        <i class="fas fa-external-link-alt" data-key={item._id} on:click={openPublication}></i>
-        <div class="group">
-            <i class="far fa-comment"></i>
-            <span>{item.comments.length}</span>
+<article>
+    <div class="header">
+        {#if avatar}
+            <img src={avatar} alt="Imagen de perfil">
+        {:else}
+            <i class="fas fa-user-circle"></i>
+        {/if}
+        <div class="authorBox">
+            <h4>{item.author}</h4>
+            <p>{moment(item.time).fromNow()}</p>
         </div>
-        <div class="group">
-            <i class="far fa-thumbs-up"></i>
+    </div>
+    <div class="body">
+        <p>{item.description}</p>
+        {#if item.image}
+            <img src={item.image} alt="Imágen de la publicación">
+        {/if}
+    </div>
+    <div class="footer">
+        <div class="likeBox">
+            <i class="fas fa-thumbs-up"></i>
             <span>{item.likes}</span>
+        </div>
+        <div class="likeBox">
+            <i class="fas fa-thumbs-down"></i>
+            <span>{item.dislikes}</span>
+        </div>
+        <div class="likeBox">
+            <i class="fas fa-comments"></i>
+            <span>{item.comments.length}</span>
         </div>
     </div>
 </article>
@@ -36,62 +47,40 @@
 <style lang="sass">
     article
         width: 100%
-        height: 50vh
-        border-radius: 20px
-        box-shadow: 0 4px 10px 5px rgba(0,0,0,.2)
-        position: relative
-        & > i
-            position: absolute
-            font-size: 3rem
-            top: 3rem
-            left: 1rem
-            color: white
-            text-shadow: 0 0 5px black
-            cursor: pointer
-        & > img
-            width: 3rem
-            height: 3rem
-            border-radius: 50%
-            position: absolute
-            box-shadow: 0 0 5px 0 black
-            top: 3rem
-            left: 1rem
-            cursor: pointer
-        h2
-            font-size: 1rem
-            text-align: center
-            padding: 0.5rem
-            color: white
-            background: rgba(0,0,0,.4)
-            border-top-left-radius: 20px
-            border-top-right-radius: 20px
-        .elementsBox
+        padding: 1rem
+        border-radius: 1rem
+        border: 2px solid #F0F0F0
+        margin: 0.7rem 0
+        .header
             display: flex
-            padding: 0.7rem
-            background: white
-            position: absolute
-            width: 100%
-            border-radius: 20px
-            bottom: 0
-            .fa-external-link-alt
-                position: absolute
-                right: 2rem
-                bottom: 1.5rem
-                font-size: 2rem
-                background: #6C63FF
-                padding: 0.7rem
+            gap: 0.7rem
+            align-items: center
+            img
+                width: 2rem
+                height: 2rem
+                object-fit: cover
                 border-radius: 100%
-                color: white
-                box-shadow: 0 0 3px 1px rgba(0,0,0,.5)
+                box-shadow: 0 0 5px 0 rgba(0,0,0,.4)
                 cursor: pointer
-            .group
-                margin: 0 0.4rem
-                span
-                    padding: 0.1rem 0.37rem
+            i
+                font-size: 2rem
+                cursor: pointer
+            .authorBox
+                p
                     font-size: 0.7rem
-                    background: #6C63FF
-                    border-radius: 100%
-                    color: white
-                    box-shadow: 0 0 1px 1px rgba(0,0,0,.3)
+                    color: #6A6A6A
+        .body
+            margin: 1.5rem 0
+            img
+                width: 15rem
+                border-radius: 1rem
+                box-shadow: 0 4px 10px 0 rgba(0,0,0,.1)
+                margin: 1rem 0
+                cursor: pointer
+        .footer
+            display: flex
+            gap: 1rem
+            i
+                cursor: pointer
 
 </style>
