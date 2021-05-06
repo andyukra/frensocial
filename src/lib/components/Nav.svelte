@@ -15,16 +15,20 @@
     onMount(() => {
         const searchBox = document.querySelector('#searchBox');
         const boxUsers = document.querySelector('.boxUsers');
-        const postModal = document.querySelector('.postModal');
-        const closeModal = document.querySelector('.closeModal');
-        const postBtn = document.querySelector('.postBtn');
+        try {
+            const postModal = document.querySelector('.postModal');
+            const closeModal = document.querySelector('.closeModal');
+            const postBtn = document.querySelector('.postBtn');
 
-        postBtn.addEventListener('click', () => {
-            postModal.style.display = 'block';
-        });
-        closeModal.addEventListener('click', () => {
-            postModal.style.display = 'none';
-        });
+            postBtn.addEventListener('click', () => {
+                postModal.style.display = 'block';
+            });
+            closeModal.addEventListener('click', () => {
+                postModal.style.display = 'none';
+            });
+        } catch (error) {
+            
+        }
         searchBox.addEventListener('keyup', () => {
             if(searchBox.value.length === 0) {
                 boxUsers.style.display = 'none';
@@ -113,40 +117,42 @@
     }
 </script>
 
-<div class="postModal">
-    <div class="contentModal">
-        <i class="fas fa-times-circle closeModal"></i>
-        <form on:submit|preventDefault={createPost}>
-            <div class="msgSender">
-                {#if allUsers}
-                    <img src={allUsers.filter(x=>x.username===user)[0]['avatar']} alt="My Avatar">
-                {:else}
-                    <i class="fas fa-user-circle"></i>
-                {/if}
-                <textarea required rows="3" maxlength="250" placeholder="Escribe algo..." bind:value={descrip}></textarea>
-            </div>
-            <div class="postOpts">
-                <div class="separeBox">
-                    <input id="imgUp" type="file" hidden accept="image/*" bind:files>
-                    <label for="imgUp">
-                        <i class="fas fa-image"></i>
-                    </label>
-                    <div class="sectionChoice">
-                        <p>Sección : </p>
-                        <select bind:value={type}>
-                            <option value="todo" selected>De todo</option>
-                            <option value="musica">Música</option>
-                            <option value="politica">Política</option>
-                            <option value="chismes">Chismes</option>
-                            <option value="quejas">Quejas</option>
-                        </select>
-                    </div>
+{#if user || auth}
+    <div class="postModal">
+        <div class="contentModal">
+            <i class="fas fa-times-circle closeModal"></i>
+            <form on:submit|preventDefault={createPost}>
+                <div class="msgSender">
+                    {#if allUsers}
+                        <img src={allUsers.filter(x=>x.username===user)[0]['avatar']} alt="My Avatar">
+                    {:else}
+                        <i class="fas fa-user-circle"></i>
+                    {/if}
+                    <textarea required rows="3" maxlength="250" placeholder="Escribe algo..." bind:value={descrip}></textarea>
                 </div>
-                <button>Publicar</button>
-            </div>
-        </form>
+                <div class="postOpts">
+                    <div class="separeBox">
+                        <input id="imgUp" type="file" hidden accept="image/*" bind:files>
+                        <label for="imgUp">
+                            <i class="fas fa-image"></i>
+                        </label>
+                        <div class="sectionChoice">
+                            <p>Sección : </p>
+                            <select bind:value={type}>
+                                <option value="todo" selected>De todo</option>
+                                <option value="musica">Música</option>
+                                <option value="politica">Política</option>
+                                <option value="chismes">Chismes</option>
+                                <option value="quejas">Quejas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button>Publicar</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+{/if}
 <nav>
     <a href="/">
         <h2>Frensocial</h2>

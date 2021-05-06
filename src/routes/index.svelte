@@ -132,7 +132,7 @@
         width: 70%
         display: grid
         grid-template-columns: 1fr 2fr
-        margin: 2rem auto
+        margin: 7rem auto
         place-items: center
         @media(max-width: 800px)
             grid-template-columns: 1fr

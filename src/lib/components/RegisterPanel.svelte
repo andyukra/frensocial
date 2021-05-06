@@ -74,9 +74,10 @@
 
 <style lang="sass">
     .registerPanel
+        width: 70%
         display: flex
         align-items: center
-        margin: 40px 0
+        margin: 5rem auto
         background: white
         justify-content: space-around
         border-radius: 30px
