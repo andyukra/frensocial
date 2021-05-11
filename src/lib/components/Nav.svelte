@@ -43,7 +43,7 @@
             }
         });
         searchBox.addEventListener('focusout', e => {
-            setTimeout(()=>boxUsers.style.display = 'none', 100);
+            setTimeout(()=>boxUsers.style.display = 'none', 500);
         })
         searchBox.addEventListener('focus', () => {
             if(searchBox.value.length === 0) return null;

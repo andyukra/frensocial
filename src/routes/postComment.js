@@ -13,7 +13,7 @@ export async function post({body, context}) {
 
     const {comment, id} = JSON.parse(body);
 
-    if(/[#$%^&*()":{}|<>]/.test(comment) || comment.length > 100) {
+    if(/[{}|<>]/.test(comment) || comment.length > 101) {
         return {
             status: 409,
             body: {
