@@ -1,27 +1,47 @@
+<script>
+    import { seccion } from '$lib/store';
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+
+    const setSection = (type, e) => {
+        if(/active/g.test(e.target.className)){
+            return null;
+        }
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(x => x.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        seccion.set(type);
+        dispatch('section', {
+            key: type
+        });
+    }
+</script>
+
 <aside>
     <h4>Secciones</h4>
     <div class="contentAside">
-        <div class="card active">
+        <div class="card active" on:click={e=>setSection('todo', e)}>
             <img src="/todo.png" alt="imagen de todo">
             De todo
         </div>
-        <div class="card">
+        <div class="card" on:click={e=>setSection('musica', e)}>
             <img src="/musica.jpg" alt="imagen de música">
             Música
         </div>
-        <div class="card">
+        <div class="card" on:click={e=>setSection('politica', e)}>
             <img src="/politica.jpg" alt="imagen de política">
             Política
         </div>
-        <div class="card">
+        <div class="card" on:click={e=>setSection('chismes', e)}>
             <img src="/chismes.jpg" alt="imagen de chismes">
             Chismes
         </div>
-        <div class="card">
+        <div class="card" on:click={e=>setSection('peleas', e)}>
             <img src="/peleas.jpg" alt="imagen de peleas">
             Peleas
         </div>
-        <div class="card">
+        <div class="card" on:click={e=>setSection('chistes', e)}>
             <img src="/chistes.jpg" alt="imagen de chistes">
             Chistes
         </div>
@@ -30,8 +50,7 @@
 
 <style lang="sass">
     .active
-        background: #F0EFFF
-        border: 2px solid #6C63FF
+        background: #aaeeff
     aside
         position: fixed
         background: white
@@ -69,7 +88,7 @@
                 transition: 0.2s
                 transform: scale(1)
                 &:hover
-                    background: #F0EFFF
+                    background: #aaeeff
                     transform: scale(1.04)
                 img
                     width: 3rem

@@ -14,7 +14,7 @@
         publicaciones.subscribe(val => pub = val);
         usuarios.subscribe(val => usr = val);
 
-        if(!pub) {
+        if(!pub || !usr) {
             const res = await fetch('/getPublications?key=all');
         
             if(res.ok) {
@@ -45,10 +45,19 @@
     import Publications from '$lib/components/Publications.svelte';
     import Sections from "$lib/components/Sections.svelte";
 
+    const getAndSetPubsType = async e => {
+        const type = e.detail.key;
+        const res = await fetch(`/getPublications?type=${type}`);
+        if(res.ok){
+            publicaciones.set(0);
+            const result = await res.json();
+            publicaciones.set(result.data);
+        }
+    }
 </script>
 
 <div class="home">
-    <Sections/>
+    <Sections on:section={getAndSetPubsType}/>
     <Publications />
 </div>
 

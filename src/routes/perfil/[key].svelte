@@ -121,7 +121,7 @@
 
 <h2 class="myPublicationsText">Mis publicaciones</h2>
 
-<Publications user={user?.username}/>
+<Publications />
 
 <style lang="sass">
     .myPublicationsText

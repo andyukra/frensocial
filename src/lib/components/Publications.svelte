@@ -1,30 +1,17 @@
 <script>
-    import { onDestroy } from 'svelte';
-    import { publicaciones, usuarios } from "$lib/store";
+    import { publicaciones, usuarios, seccion } from "$lib/store";
     import TarjetaPub from '$lib/components/TarjetaPub.svelte';
     import Loader from '$lib/components/Loader.svelte';
-    export let user;
 
-    let data, data2, unsubscribe1, unsubscribe2;
-
-    if(user){
-        unsubscribe1 = publicaciones.subscribe(val => data = val.filter(x => user === x.author));      
-    } else {
-        unsubscribe1 = publicaciones.subscribe(val => data = val);
-    }
-    
-    unsubscribe2 = usuarios.subscribe(val => data2 = val);
-
-    onDestroy(unsubscribe1, unsubscribe2);
 </script>
 
 <section>
-    {#if data}
-         {#each data as item}
-            <TarjetaPub data={{item, avatar: data2.filter(x=>item.author === x.username)[0].avatar}}/>
-         {/each}
+    {#if $publicaciones}
+        {#each $publicaciones as item}
+            <TarjetaPub data={{item, avatar: $usuarios.filter(x=>item.author === x.username)[0].avatar}}/>
+        {/each}
     {:else}
-            <Loader/>
+        <Loader/>
     {/if}
 </section>
 
