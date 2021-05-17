@@ -24,18 +24,16 @@
                 if(res2.ok) {
                     const result2 = await res2.json();
                     usuarios.set(result2.usuarios);
-                }
-                    return {
-                        status: 200
-                    }
-                } else {
+                }               
+            } else {
                     return {
                         status: 409
                     }
-            }
+                }
         }
         return {
-            status: 200
+            status: 200,
+            props: {auth: session.authenticated}
         }
     }
 
@@ -44,6 +42,7 @@
 <script>
     import Publications from '$lib/components/Publications.svelte';
     import Sections from "$lib/components/Sections.svelte";
+    export let auth;
 
     const getAndSetPubsType = async e => {
         const type = e.detail.key;
@@ -58,7 +57,7 @@
 
 <div class="home">
     <Sections on:section={getAndSetPubsType}/>
-    <Publications />
+    <Publications auth={auth}/>
 </div>
 
 <style lang="sass">

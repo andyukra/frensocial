@@ -1,12 +1,14 @@
 <script>
     import moment from 'moment';
     import { usuarios } from "$lib/store";
-    import { onDestroy } from "svelte";
+    import { onDestroy, createEventDispatcher } from "svelte";
+    import { goto } from '$app/navigation';
     export let data;
 
     const {item, avatar} = data;
     let comment, allUsers;
     let commentsBoxState = 0;
+    const dispatch = createEventDispatcher();
 
     const unsubscribe = usuarios.subscribe(val => allUsers = val);
 
@@ -52,24 +54,33 @@
             commentsBoxState = !commentsBoxState;
         }
      }
+
+     const openImageModal = (image) => {
+         dispatch('openModal', {
+             image
+         });
+     }
 </script>
 
 <article data-type={item.type}>
     <div class="header">
-        {#if avatar}
-            <img src={avatar} alt="Imagen de perfil">
-        {:else}
-            <i class="fas fa-user-circle"></i>
-        {/if}
-        <div class="authorBox">
-            <h4>{item.author}</h4>
-            <p>{moment(item.time).fromNow()}</p>
+        <div class="author">
+            {#if avatar}
+                <img src={avatar} alt="Imagen de perfil" on:click={()=>goto(`/perfil/${item.author}`)}>
+            {:else}
+                <i class="fas fa-user-circle" on:click={()=>goto(`/perfil/${item.author}`)}></i>
+            {/if}
+            <div class="authorBox">
+                <h4>{item.author}</h4>
+                <p>{moment(item.time).fromNow()}</p>
+            </div>
         </div>
+        <i class="fas fa-arrow-alt-circle-right" on:click={()=>goto(`/publications/${item._id}`)}></i>
     </div>
     <div class="body">
         <p>{item.description}</p>
         {#if item.image}
-            <img src={item.image} alt="Imágen de la publicación">
+            <img src={item.image} on:click={()=>openImageModal(item.image)} alt="Imágen de la publicación">
         {/if}
     </div>
     <div class="footer">
@@ -107,19 +118,21 @@
                 </div>        
             {/each}
         {/if}
-        <div class="commentsPost">
-            {#if avatar}
-                <img src={avatar} alt="Imagen de perfil">
-            {:else}
-                <i class="fas fa-user-circle"></i>
-            {/if}
-            <form on:submit|preventDefault={postComment}>
-                <input type="text" placeholder="Escribe un comentario..." maxlength="100" minlength="1" bind:value={comment}>
-                <button>
-                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                </button>
-            </form>
-        </div>
+        {#if data.auth}
+            <div class="commentsPost">
+                {#if avatar}
+                    <img src={avatar} alt="Imagen de perfil">
+                {:else}
+                    <i class="fas fa-user-circle"></i>
+                {/if}
+                <form on:submit|preventDefault={postComment}>
+                    <input type="text" placeholder="Escribe un comentario..." maxlength="100" minlength="1" bind:value={comment}>
+                    <button>
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
+        {/if}
     </div>
 </article>
 
@@ -195,6 +208,10 @@
             display: flex
             gap: 0.7rem
             align-items: center
+            justify-content: space-between
+            .author
+                display: flex
+                gap: 0.5rem
             img
                 width: 2rem
                 height: 2rem
@@ -203,8 +220,12 @@
                 box-shadow: 0 0 5px 0 rgba(0,0,0,.4)
                 cursor: pointer
             i
-                font-size: 2rem
+                font-size: 1.3rem
                 cursor: pointer
+                transition: 0.4s
+                color: #6C63FF
+                &:hover
+                    color: darken(#6C63FF, 40%)
             .authorBox
                 p
                     font-size: 0.7rem

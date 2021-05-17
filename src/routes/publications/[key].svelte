@@ -109,7 +109,7 @@
 
 <div class="modalImg">
     <i class="fa fa-times closeImg" aria-hidden="true"></i>
-    <img src={data[0].image} alt={data[0].title}>
+    <img src={data[0].image} alt="imagen">
 </div>
 <section>
     <div class="header">
@@ -145,10 +145,9 @@
             </div>
         </div>
     </div>
-    <h1>{data[0].title}</h1>
     <div class="content">
         <div class="imgBox">
-           <img src={data[0].image} class="imagen" alt={data[0].title}>
+           <img src={data[0].image} class="imagen" alt="imagen">
            <p>{data[0].description}</p>
         </div>
         <div class="commentsBox">
@@ -227,25 +226,19 @@
     i
         cursor: pointer
     section
-        width: 100%
-        padding: 1.5rem
+        width: 70%
         background: white
+        padding: 2rem
         box-shadow: 0 4px 32px 0 rgba(0,0,0,.1)
         border-radius: 1.5rem
-        margin: 1.1rem 0 1.1rem 0
+        margin: 5rem auto
         @media(max-width: 800px)
             padding: 0.8rem
-        h1
-            text-align: center
-            margin: 0.8rem 0
-            padding: 0.4rem
-            border-radius: 2rem
-            background: #6C63FF
             width: 100%
-            color: white
         .header
             display: flex
             justify-content: space-between
+            margin-bottom: 1rem
             .author
                 display: flex
                 align-items: center
@@ -279,12 +272,13 @@
                         border-radius: 50%
         .content
             display: flex
+            gap: 2rem
             @media(max-width: 800px)
                 flex-direction: column
             .commentsBox
                 flex: 1
                 margin: 0 0.5rem
-                background: #eaeaea
+                background: lighten(#6C63FF, 23%)
                 padding: 0.7rem
                 border-radius: 1rem
                 display: flex
@@ -354,7 +348,7 @@
                     box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
                 p
                     padding: 0.8rem
-                    background: #eaeaea
+                    background: lighten(#6C63FF, 23%)
                     border-radius: 1rem
                     box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
                     @media(max-width: 800px)
