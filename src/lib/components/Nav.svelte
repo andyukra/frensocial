@@ -13,8 +13,8 @@
     onDestroy(unsubscribe);
 
     onMount(() => {
-        const searchBox = document.querySelector('#searchBox');
-        const boxUsers = document.querySelector('.boxUsers');
+        const searchBoxs = document.querySelectorAll('.searchBoxs');
+        const boxsUsers = document.querySelectorAll('.boxUsers');
         const closeMenu = document.querySelector('.closeMenu');
         const menuPhoneScreen = document.querySelector('.menuPhoneScreen');
         const menuPhone = document.querySelector('.menuPhone');
@@ -40,26 +40,28 @@
         menuPhone.addEventListener('click', () => {
             menuPhoneScreen.style.left = '0';
         })
-        searchBox.addEventListener('keyup', () => {
-            if(searchBox.value.length === 0) {
-                boxUsers.style.display = 'none';
-                return null;
-            } else {
-                let regExp = new RegExp(searchBox.value, 'gi');
-                searchResult = allUsers.filter(x => regExp.test(x.username));
-                if(!searchResult || searchResult.length === 0) {
+        searchBoxs.forEach(x => {
+            x.addEventListener('keyup', () => {
+                if(x.value.length === 0) {
+                    boxsUsers.forEach(x => x.style.display = 'none');
                     return null;
+                } else {
+                    let regExp = new RegExp(x.value, 'gi');
+                    searchResult = allUsers.filter(x => regExp.test(x.username));
+                    if(!searchResult || searchResult.length === 0) {
+                        return null;
+                    }
+                    boxsUsers.forEach(x => x.style.display = 'block');
                 }
-                boxUsers.style.display = 'block';
-            }
+            });
+            x.addEventListener('focusout', e => {
+                setTimeout(()=>boxsUsers.forEach(x => x.style.display = 'none'), 500);
+            });
+            x.addEventListener('focus', () => {
+                if(x.value.length === 0) return null;
+                boxsUsers.forEach(x => x.style.display = 'block');
+            });
         });
-        searchBox.addEventListener('focusout', e => {
-            setTimeout(()=>boxUsers.style.display = 'none', 500);
-        })
-        searchBox.addEventListener('focus', () => {
-            if(searchBox.value.length === 0) return null;
-            boxUsers.style.display = 'block';
-        })
     });
 
     const closeSession = () => {
@@ -172,7 +174,7 @@
     <div class="menuPhoneScreen">
         <i class="fas fa-times closeMenu"></i>
         <div class="searchBox">
-            <input id="searchBox" type="search" maxlength="25" placeholder="Buscar...">
+            <input class="searchBoxs" type="search" maxlength="25" placeholder="Buscar...">
             <i class="fas fa-search"></i>
             <div class="boxUsers">
                 {#if searchResult}
@@ -214,7 +216,7 @@
     </div>
     <div class="navOpts">
         <div class="searchBox">
-            <input id="searchBox" type="search" maxlength="25" placeholder="Buscar...">
+            <input class="searchBoxs" type="search" maxlength="25" placeholder="Buscar...">
             <i class="fas fa-search"></i>
             <div class="boxUsers">
                 {#if searchResult}
