@@ -21,11 +21,13 @@
         try {
             const postModal = document.querySelector('.postModal');
             const closeModal = document.querySelector('.closeModal');
-            const postBtn = document.querySelector('.postBtn');
+            const postBtn = document.querySelectorAll('.postBtn');
 
-            postBtn.addEventListener('click', () => {
-                postModal.style.display = 'block';
-            });
+            postBtn.forEach(x => {
+                x.addEventListener('click', () => {
+                    postModal.style.display = 'block';
+                });
+            })
             closeModal.addEventListener('click', () => {
                 postModal.style.display = 'none';
             });
@@ -106,23 +108,22 @@
                     }
                 }
             }
-        }
-
-        const res2 = await fetch('/publish', {
+        } else {
+            const res2 = await fetch('/publish', {
                 method: 'POST',
                 body: JSON.stringify({
                     description: descrip,
                     type
             })
-        });
-        if(res2.ok){
-            const result2 = await res2.text();
-            const {message} = JSON.parse(result2);
-            if(message === 'success') {
-                location.href = '/home';
+            });
+            if(res2.ok){
+                const result2 = await res2.text();
+                const {message} = JSON.parse(result2);
+                if(message === 'success') {
+                    location.href = '/home';
+                }
             }
         }
-
     }
 </script>
 

@@ -52,6 +52,7 @@
             display: none
             justify-content: center
             align-items: center
+            z-index: 2000
             i
                 position: absolute
                 right: 2rem
