@@ -130,10 +130,9 @@
     section
         width: 100%
         .perfil
-            margin: 2rem 0
+            margin: 5rem 0
             padding: 1rem
             background: white
-            border-radius: 1.3rem
             box-shadow: 0 4px 32px 0 rgba(0,0,0,.1)
             .imgBox
                 width: 100%
@@ -142,6 +141,7 @@
                 align-items: center
                 justify-content: center
                 position: relative
+                z-index: 0
                 i
                     font-size: 10rem
                     cursor: pointer

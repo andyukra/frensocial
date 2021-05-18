@@ -59,6 +59,8 @@
         box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
         width: 24%
         min-height: 100vh
+        @media (max-width: 720px)
+            display: none
         h4
             margin: 2rem 0 1rem 2rem
             position: relative

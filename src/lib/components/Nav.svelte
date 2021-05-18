@@ -15,6 +15,9 @@
     onMount(() => {
         const searchBox = document.querySelector('#searchBox');
         const boxUsers = document.querySelector('.boxUsers');
+        const closeMenu = document.querySelector('.closeMenu');
+        const menuPhoneScreen = document.querySelector('.menuPhoneScreen');
+        const menuPhone = document.querySelector('.menuPhone');
         try {
             const postModal = document.querySelector('.postModal');
             const closeModal = document.querySelector('.closeModal');
@@ -29,6 +32,12 @@
         } catch (error) {
             
         }
+        closeMenu.addEventListener('click', () => {
+            menuPhoneScreen.style.left = '-100vw';
+        });
+        menuPhone.addEventListener('click', () => {
+            menuPhoneScreen.style.left = '0';
+        })
         searchBox.addEventListener('keyup', () => {
             if(searchBox.value.length === 0) {
                 boxUsers.style.display = 'none';
@@ -144,6 +153,7 @@
                                 <option value="politica">Política</option>
                                 <option value="chismes">Chismes</option>
                                 <option value="quejas">Quejas</option>
+                                <option value="peleas">Peleas</option>
                             </select>
                         </div>
                     </div>
@@ -157,6 +167,50 @@
     <a href="/">
         <h2>Frensocial</h2>
     </a>
+    <i class="fas fa-bars menuPhone"></i>
+    <div class="menuPhoneScreen">
+        <i class="fas fa-times closeMenu"></i>
+        <div class="searchBox">
+            <input id="searchBox" type="search" maxlength="25" placeholder="Buscar...">
+            <i class="fas fa-search"></i>
+            <div class="boxUsers">
+                {#if searchResult}
+                    {#each searchResult as user}
+                         <article class="userSearchBox" on:click={() => goto(`/perfil/${user.username}`)}>
+                             {#if user.avatar}
+                                <img src={user.avatar} alt={user.username}>
+                                <p>{user.username}</p>
+                             {:else}
+                                <i class="fas fa-user-circle"></i>
+                                <p class="bugged">{user.username}</p>
+                             {/if}
+                             
+                         </article>
+                    {/each}
+                {/if}
+            </div>
+        </div>
+        {#if auth && user}
+            <div class="navOptsPhone">
+                <button class="postBtn">
+                    <p>Crear</p>
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </button>
+                <div class="userMenu" on:click={()=>goto(`/perfil/${user}`)}>
+                    {#if allUsers}
+                        <img src={allUsers.filter(x=>x.username===user)[0]['avatar']} alt="My Avatar">
+                    {:else}
+                        <i class="fas fa-user-circle"></i>
+                    {/if}
+                    <p>{user}</p>
+                </div>
+                <div class="closeSession" on:click={closeSession}>
+                    <i class="fas fa-power-off"></i>
+                    <p>Cerrar sessión</p>
+                </div>
+            </div>
+        {/if}
+    </div>
     <div class="navOpts">
         <div class="searchBox">
             <input id="searchBox" type="search" maxlength="25" placeholder="Buscar...">
@@ -183,7 +237,7 @@
                 <p>Crear</p>
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </button>
-            <div class="userMenu">
+            <div class="userMenu" on:click={()=>goto(`/perfil/${user}`)}>
                 {#if allUsers}
                     <img src={allUsers.filter(x=>x.username===user)[0]['avatar']} alt="My Avatar">
                 {:else}
@@ -196,8 +250,82 @@
 </nav>
 
 <style lang="sass">
+    .closeSession
+        display: flex
+        gap: 1rem
+        padding: 1rem
+        cursor: pointer
+        border-radius: 2rem
+        &:hover
+            background: lighten(green, 55%)
+            color: red
+    .navOptsPhone
+        display: flex
+        flex-direction: column
+        gap: 2rem
+    .postBtn
+        display: flex
+        padding: 0.3rem 0.5rem
+        gap: 0.5rem
+        border: none
+        background: #6C63FF
+        color: white
+        font-family: inherit
+        border-radius: 2rem
+        align-items: center
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.4)
+        cursor: pointer
+    .userMenu
+        display: flex
+        gap: 0.5rem
+        align-items: center
+        cursor: pointer
+        i
+            font-size: 2rem
+        img
+            width: 2rem
+            height: 2rem
+            border-radius: 100%
+            object-fit: cover
+    .menuPhoneScreen
+        width: 100vw
+        height: 100vh
+        background: white
+        position: absolute
+        top: 0
+        left: -150vw
+        z-index: 1500
+        transition: 0.5s
+        display: flex
+        justify-content: center
+        align-items: center
+        flex-direction: column
+        gap: 2rem
+        & > i
+            position: absolute
+            right: 1.4rem
+            top: 1.4rem
+            font-size: 1.7rem
+            padding: 0.4rem 0.7rem
+            border-radius: 100%
+            color: black
+            transition: 0.23s
+            cursor: pointer
+            &:hover
+                background: rgba(0,0,0,.4)
+    .menuPhone
+        cursor: pointer
+        padding: 0.7rem
+        border-radius: 100%
+        transition: 0.23s
+        &:hover
+            background: rgba(90,70,250,.3)
+        @media (min-width: 720px)
+            display: none
     .postModal
         position: fixed
+        top: 0
+        left: 0
         width: 100%
         height: 100%
         background: rgba(0,0,0,.7)
@@ -223,7 +351,9 @@
                 border-radius: 2.5rem
                 background: white
                 box-shadow: 0 4px 15px 0 rgba(0,0,0,.2)
-                width: 50%
+                width: 50%           
+                @media (max-width: 720px)
+                    width: 95%        
                 .postOpts
                     display: flex
                     align-items: center
@@ -255,6 +385,9 @@
                             display: flex
                             gap: 1rem
                             align-items: center
+                            p
+                                @media (max-width: 850px)
+                                    display: none
                             select
                                 padding: 0.3rem 0.7rem
                                 border: none
@@ -303,6 +436,7 @@
         justify-content: space-between
         align-items: center
         box-shadow: 0px 4px 26px -15px rgba(0, 0, 0, .17)
+        z-index: 100
         a
             text-decoration: none
             color: black
@@ -311,83 +445,62 @@
             display: flex
             align-items: center
             gap: 1.2rem
-            .postBtn
-                display: flex
-                padding: 0.3rem 0.5rem
-                gap: 0.5rem
-                border: none
-                background: #6C63FF
-                color: white
-                font-family: inherit
-                border-radius: 2rem
-                align-items: center
-                box-shadow: 0 2px 5px 0 rgba(0,0,0,.4)
-                cursor: pointer
-            .userMenu
-                display: flex
-                gap: 0.5rem
-                align-items: center
-                cursor: pointer
-                i
-                    font-size: 2rem
-                img
-                    width: 2rem
-                    height: 2rem
-                    border-radius: 100%
-                    object-fit: cover
-            .searchBox
-                display: flex
-                position: relative
-                .boxUsers
-                    display: none
-                    position: absolute
-                    z-index: 500
-                    top: 170%
-                    left: -50%
-                    width: 150%
-                    height: 15rem
-                    overflow-x: hidden
-                    overflow-y: auto
-                    background: white
-                    box-shadow: 0 4px 0 0 rgba(0,0,0,.1)
-                    border-radius: 0.4rem
-                    padding: 1rem
-                    article
-                        display: flex
-                        width: 100%
-                        margin-bottom: 1rem
-                        align-items: center
-                        gap: 1rem
-                        position: relative
-                        cursor: pointer
-                        transition: 0.4s
-                        padding: 0 0.5rem
-                        border-radius: 2rem
-                        height: 3rem
-                        &:hover
-                            background: rgba(0,0,0,.1)
-                        i
-                            font-size: 2rem
-                            color: black
-                        img
-                            width: 2rem
-                            height: 2rem
-                            object-fit: cover
-                            border-radius: 100%
-                        .bugged
-                            margin-left: 3rem
-                [type=search]
-                    border: none
-                    border-bottom: 2px solid #6C63FF
-                    padding-left: 1.1rem
-                    padding-bottom: 3px
-                    font-family: inherit
-                    font-size: 0.8rem
-                    &:focus
-                        outline: none
-                i
-                    color: #7a7a7a
-                    font-size: 0.8rem
-                    position: absolute
+            @media (max-width: 720px)
+                display: none
+.searchBox
+    display: flex
+    position: relative
+    max-height: 2rem
+    .boxUsers
+        display: none
+        position: absolute
+        z-index: 500
+        top: 170%
+        left: -50%
+        width: 150%
+        height: 15rem
+        overflow-x: hidden
+        overflow-y: auto
+        background: white
+        box-shadow: 0 4px 0 0 rgba(0,0,0,.1)
+        border-radius: 0.4rem
+        padding: 1rem
+        article
+            display: flex
+            width: 100%
+            margin-bottom: 1rem
+            align-items: center
+            gap: 1rem
+            position: relative
+            cursor: pointer
+            transition: 0.4s
+            padding: 0 0.5rem
+            border-radius: 2rem
+            height: 3rem
+            &:hover
+                background: rgba(0,0,0,.1)
+            i
+                font-size: 2rem
+                color: black
+            img
+                width: 2rem
+                height: 2rem
+                object-fit: cover
+                border-radius: 100%
+            .bugged
+                margin-left: 3rem
+    [type=search]
+        border: none
+        border-bottom: 2px solid #6C63FF
+        padding-left: 1.1rem
+        padding-bottom: 3px
+        font-family: inherit
+        font-size: 0.8rem
+        &:focus
+            outline: none
+    i
+        color: #7a7a7a
+        font-size: 0.8rem
+        position: absolute
 
 </style>

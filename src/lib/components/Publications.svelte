@@ -39,6 +39,8 @@
         background: white
         box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
         border-radius: 1.5rem
+        @media (max-width: 720px)
+            width: auto
         .modalImg
             position: fixed
             top: 0
