@@ -97,7 +97,7 @@
                 const res2 = await fetch('/publish', {
                     method: 'POST',
                     body: JSON.stringify({
-                        image: result.data.display_url,
+                        image: result.data.url,
                         description: descrip,
                         type
                     })
@@ -320,7 +320,7 @@
         cursor: pointer
         padding: 0.7rem
         border-radius: 100%
-        transition: 0.23s
+        transition: 0.23s ease-in
         &:hover
             background: rgba(90,70,250,.3)
         @media (min-width: 720px)
