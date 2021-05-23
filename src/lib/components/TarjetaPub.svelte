@@ -60,6 +60,11 @@
              image
          });
      }
+
+     const openMoreOpts = e => {
+         const box = e.target.nextElementSibling;
+         box.classList.toggle('open');
+     }
 </script>
 
 <article data-type={item.type}>
@@ -75,7 +80,19 @@
                 <p>{moment(item.time).fromNow()}</p>
             </div>
         </div>
-        <i class="fas fa-arrow-alt-circle-right" on:click={()=>goto(`/publications/${item._id}`)}></i>
+        <div class="moreOpts">
+            <i class="fas fa-ellipsis-v" on:click={openMoreOpts}></i>
+            <ul class="moreOptsBox open">
+                {#if item.image}
+                    <li class="opt1" on:click={()=>goto(`/publications/${item._id}`)}>
+                        <i class="fas fa-sign-in-alt"></i>
+                        <p>Abrir</p>
+                    </li>
+                {:else}
+                    <p>Opciones</p>
+                {/if}
+            </ul>
+        </div>
     </div>
     <div class="body">
         <p>{item.description}</p>
@@ -137,6 +154,8 @@
 </article>
 
 <style lang="sass">
+    .open
+        display: none !important
     article
         width: 100%
         padding: 1rem
@@ -219,13 +238,39 @@
                 border-radius: 100%
                 box-shadow: 0 0 5px 0 rgba(0,0,0,.4)
                 cursor: pointer
-            i
-                font-size: 1.3rem
-                cursor: pointer
-                transition: 0.4s
-                color: #6C63FF
-                &:hover
-                    color: darken(#6C63FF, 40%)
+            .moreOpts
+                position: relative
+                .moreOptsBox
+                    display: block
+                    padding: 1rem
+                    background: lighten(#aaeeff, 12%)
+                    position: absolute
+                    left: -7rem
+                    top: 130%
+                    border-radius: 1rem
+                    box-shadow: 0 4px 2px 0 rgba(0,0,0,.2)
+                    li
+                        list-style: none
+                        display: flex
+                        gap: 0.8rem
+                        font-size: 0.8rem
+                        align-items: center
+                        cursor: pointer
+                        transition: 0.3s
+                        padding: 0.7rem 1.5rem
+                        border-radius: 1rem
+                        &:hover
+                            background: rgba(0,0,0,.1)
+                        i
+                            color: black
+                            font-size: 0.9rem
+                i
+                    font-size: 1.3rem
+                    cursor: pointer
+                    transition: 0.4s
+                    color: #6C63FF
+                    &:hover
+                        color: darken(#6C63FF, 40%)
             .authorBox
                 p
                     font-size: 0.7rem

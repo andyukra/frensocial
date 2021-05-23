@@ -147,8 +147,8 @@
     </div>
     <div class="content">
         <div class="imgBox">
-           <img src={data[0].image} class="imagen" alt="imagen">
-           <p>{data[0].description}</p>
+            <img src={data[0].image} class="imagen" alt="imagen">
+            <p>{data[0].description}</p>
         </div>
         <div class="commentsBox">
            <h4>Comentarios</h4>
