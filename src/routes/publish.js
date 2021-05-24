@@ -11,7 +11,7 @@ export async function post({ body, context }) {
         }
     }
 
-    const { image, type, description } = JSON.parse(body);
+    const { image, type, description, thumb } = JSON.parse(body);
     let newPublication;
 
     if (!description || /[&{}|<>]/.test(description) || description.length > 250) {
@@ -34,12 +34,12 @@ export async function post({ body, context }) {
     }
 
     if (image) {
-        newPublication = new publications({ image, type, description, author: context.user });
+        newPublication = new publications({ image, type, description, author: context.user, thumb });
     } else {
         newPublication = new publications({ type, description, author: context.user });
     }
 
-    const published = await newPublication.save();
+    await newPublication.save();
 
     return {
         status: 200,

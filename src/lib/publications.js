@@ -21,6 +21,10 @@ const publication = new Schema({
         type: String,
         default: ''
     },
+    thumb: {
+        type: String,
+        default: ''
+    },
     description: {
         type: String,
         maxlength: 250,

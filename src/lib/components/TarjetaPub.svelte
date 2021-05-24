@@ -1,18 +1,19 @@
 <script>
     import moment from 'moment';
-    import { usuarios } from "$lib/store";
+    import { usuarios, yo } from "$lib/store";
     import { onDestroy, createEventDispatcher } from "svelte";
     import { goto } from '$app/navigation';
     export let data;
 
     const {item, avatar} = data;
-    let comment, allUsers;
+    let comment, allUsers, YO;
     let commentsBoxState = 0;
     const dispatch = createEventDispatcher();
 
     const unsubscribe = usuarios.subscribe(val => allUsers = val);
+    const unsubscribe2 = yo.subscribe(val => YO = val);
 
-    onDestroy(unsubscribe);
+    onDestroy(unsubscribe, unsubscribe2);
 
      const sendLikeOrDislike = async (type, e) => {
         const res = await fetch(`/likes?type=${type}&id=${item._id}`);
@@ -65,6 +66,17 @@
          const box = e.target.nextElementSibling;
          box.classList.toggle('open');
      }
+
+     const deletePost = async () => {
+         const res = await fetch(`/deletePost?id=${item._id}`, {method: 'DELETE'});
+         if(res.ok) {
+             const result = await res.json();
+             const {message} = result;
+             if(message === 'success'){
+                 location.href = location.href;
+             }
+         }
+     }
 </script>
 
 <article data-type={item.type}>
@@ -84,12 +96,18 @@
             <i class="fas fa-ellipsis-v" on:click={openMoreOpts}></i>
             <ul class="moreOptsBox open">
                 {#if item.image}
-                    <li class="opt1" on:click={()=>goto(`/publications/${item._id}`)}>
+                    <li on:click={()=>goto(`/publications/${item._id}`)}>
                         <i class="fas fa-sign-in-alt"></i>
                         <p>Abrir</p>
                     </li>
                 {:else}
                     <p>Opciones</p>
+                {/if}
+                {#if YO === item.author}
+                    <li on:click={deletePost}>
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        <p>Borrar</p>
+                    </li>
                 {/if}
             </ul>
         </div>
@@ -97,7 +115,7 @@
     <div class="body">
         <p>{item.description}</p>
         {#if item.image}
-            <img src={item.image} on:click={()=>openImageModal(item.image)} alt="Imágen de la publicación">
+            <img src={item.thumb} on:click={()=>openImageModal(item.image)} alt="Imágen de la publicación">
         {/if}
     </div>
     <div class="footer">

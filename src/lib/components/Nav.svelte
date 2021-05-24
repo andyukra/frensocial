@@ -22,6 +22,7 @@
             const postModal = document.querySelector('.postModal');
             const closeModal = document.querySelector('.closeModal');
             const postBtn = document.querySelectorAll('.postBtn');
+            const imgUp = document.querySelector('#imgUp');
 
             postBtn.forEach(x => {
                 x.addEventListener('click', () => {
@@ -30,6 +31,9 @@
             })
             closeModal.addEventListener('click', () => {
                 postModal.style.display = 'none';
+            });
+            imgUp.addEventListener('change', e => {
+                document.querySelector('.fa-image').style.color = '#6C63FF';
             });
         } catch (error) {
             
@@ -98,6 +102,7 @@
                     method: 'POST',
                     body: JSON.stringify({
                         image: result.data.url,
+                        thumb: result.data.thumb.url,
                         description: descrip,
                         type
                     })

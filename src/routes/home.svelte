@@ -1,5 +1,5 @@
 <script context="module">
-    import { publicaciones, usuarios } from "$lib/store";
+    import { publicaciones, usuarios, yo } from "$lib/store";
 
     export async function load({session, fetch}) {
         if(!session.authenticated) {
@@ -13,6 +13,7 @@
 
         publicaciones.subscribe(val => pub = val);
         usuarios.subscribe(val => usr = val);
+        yo.set(session.user);
 
         if(!pub || !usr) {
             const res = await fetch('/getPublications?key=all');
