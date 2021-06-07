@@ -39,7 +39,7 @@
         background: white
         box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
         border-radius: 1.5rem
-        @media (max-width: 720px)
+        @media (max-width: 500px)
             width: auto
         .modalImg
             position: fixed
@@ -66,6 +66,7 @@
                 padding: 0.5rem 0.8rem
                 border-radius: 100%
                 transition: 0.3s
+                text-shadow: 0 0 4px black
                 &:hover
                     background: rgba(255,255,255,0.1)
 </style>

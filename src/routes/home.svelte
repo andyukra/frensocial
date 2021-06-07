@@ -43,6 +43,7 @@
 <script>
     import Publications from '$lib/components/Publications.svelte';
     import Sections from "$lib/components/Sections.svelte";
+    import Chat from "$lib/components/Chat.svelte";
     export let auth;
 
     const getAndSetPubsType = async e => {
@@ -59,6 +60,7 @@
 <div class="home">
     <Sections on:section={getAndSetPubsType}/>
     <Publications auth={auth}/>
+    <Chat />
 </div>
 
 <style lang="sass">

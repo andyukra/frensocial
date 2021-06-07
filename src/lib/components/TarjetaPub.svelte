@@ -155,8 +155,8 @@
         {/if}
         {#if data.auth}
             <div class="commentsPost">
-                {#if avatar}
-                    <img src={avatar} alt="Imagen de perfil">
+                {#if allUsers.filter(x=>x.username===$yo)[0].avatar}
+                    <img src={allUsers.filter(x=>x.username===$yo)[0].avatar} alt="Imagen de perfil">
                 {:else}
                     <i class="fas fa-user-circle"></i>
                 {/if}
@@ -213,11 +213,12 @@
                                 &:focus
                                     outline: none
                         img
-                            width: 1.5rem
-                            height: 1.5rem
-                            border-radius: 100%
+                            width: 1.7rem
+                            height: 1.7rem
+                            border-radius: 50%
                             box-shadow: 0 0 5px 0 rgba(0,0,0,.4)
                             cursor: pointer
+                            object-fit: cover
             .comment
                 margin: 0.8rem 0 0 1rem
                 word-break: break-word
