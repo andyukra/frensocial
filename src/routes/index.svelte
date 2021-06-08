@@ -15,7 +15,7 @@
         usuarios.subscribe(val => usr = val);
 
         if(!pub || !usr){
-            const res = await fetch('/getPublications?key=all');
+            const res = await fetch('/getPublications?key=all&pag=1');
         
             if(res.ok) {
                 const result = await res.json();
@@ -188,6 +188,7 @@
         justify-content: center
         align-items: center
         transform: scale(0)
+        backdrop-filter: blur(7px)
         transition: 0.1s
         box-shadow: 0px 4px 23px 2px rgba(0,0,0,.3)
         form
@@ -199,6 +200,9 @@
             align-items: center
             flex-direction: column
             position: relative
+            @media(max-width: 500px)
+                padding: 0.5rem 2rem
+                width: 90vw
             .fa-times
                 position: absolute
                 right: 2rem
@@ -221,6 +225,8 @@
                 margin: 0.5rem 0
                 display: flex
                 flex-direction: column
+                @media(max-width: 500px)
+                    width: 90%
                 span
                     color: #777
                     font-size: 0.8rem
@@ -228,6 +234,9 @@
                     transition: 0.4s
                     position: relative
                     z-index: 0
+                    @media(max-width: 500px)
+                        font-size: 1.2rem
+                        transform: translateY(30px)
                 input
                     border: none
                     border-bottom: 3px solid #6C63FF
@@ -236,6 +245,8 @@
                     z-index: 1
                     font-family: inherit
                     padding: 7px 0
+                    @media(max-width: 500px)
+                        font-size: 1.2rem
                     &:focus
                         outline: none
             button

@@ -1,8 +1,32 @@
 <script>
-    import { publicaciones, usuarios } from "$lib/store";
+    import { publicaciones, usuarios, pag, seccion } from "$lib/store";
     import TarjetaPub from '$lib/components/TarjetaPub.svelte';
     import Loader from '$lib/components/Loader.svelte';
+    import { onMount } from 'svelte';
     export let auth;
+
+
+
+    onMount(() => {
+
+        //Detect scrollThumb in bottom
+        document.addEventListener('scroll', async e => {
+            let val1 = Math.floor(window.innerHeight + window.scrollY - 64);
+            let val2 = val1 + 1;
+            if(val1 === document.body.offsetHeight || val2 === document.body.offsetHeight){
+                const res = await fetch(`/getPublications?type=${$seccion}&pag=${$pag}`);
+                if(res.ok){
+                    const result = await res.json();
+                    if(result.data && result.data.length > 0) {
+                        publicaciones.update(val => val.concat(result.data))
+                        $pag++;
+                    }
+                    console.log($pag)
+                    return null;   
+                }
+            }         
+        });
+    });
 
     const openModal = e => {
         let modal = document.querySelector('.modalImg');

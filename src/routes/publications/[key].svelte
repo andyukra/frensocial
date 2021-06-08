@@ -351,7 +351,6 @@
                     background: lighten(#6C63FF, 23%)
                     border-radius: 1rem
                     box-shadow: 0 4px 32px 0 rgba(0,0,0,.15)
-                    @media(max-width: 800px)
-                        margin-top: 1rem
+                    margin-top: 1rem
 
 </style>

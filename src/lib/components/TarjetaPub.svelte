@@ -77,6 +77,22 @@
              }
          }
      }
+
+     const parseDescription = text => {
+        if(/https\:\/\/(www\.)?youtu\.be/.test(text)) {
+            return [
+                text.replace(/https\:\/\/(www\.)?youtu\.be(.)*\b/, ''),
+                `https://www.youtube.com/embed/${text.match(/...........$/)}`
+            ]
+        }
+        if(/https\:\/\/(www\.)?youtube/.test(text)) {
+            return [
+                text.replace(/https\:\/\/(www\.)?youtube(.)*\b/, ''),
+                `https://www.youtube.com/embed/${text.match(/v\=.........../)[0].replace('v=', '')}`
+            ]
+        }
+        return null;
+     }
 </script>
 
 <article data-type={item.type}>
@@ -113,7 +129,14 @@
         </div>
     </div>
     <div class="body">
-        <p>{item.description}</p>
+        <div class="descOrWatch">
+            {#if parseDescription(item.description)}
+                <p>{parseDescription(item.description)[0]}</p>
+                <iframe width="560" height="315" src={parseDescription(item.description)[1]} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            {:else}
+                <p>{item.description}</p>
+            {/if}
+        </div>
         {#if item.image}
             <img src={item.thumb} on:click={()=>openImageModal(item.image)} alt="Imágen de la publicación">
         {/if}
@@ -250,6 +273,11 @@
             .author
                 display: flex
                 gap: 0.5rem
+                & > i
+                    font-size: 2rem
+                    border-radius: 100%
+                    text-shadow: 0 0 5px 0 rgba(0,0,0,.4)
+                    cursor: pointer
             img
                 width: 2rem
                 height: 2rem
@@ -296,6 +324,11 @@
                     color: #6A6A6A
         .body
             margin: 1.5rem 0
+            .descOrWatch
+                iframe
+                    margin-top: 0.7rem
+                    width: 100%
+                    border-radius: 0.5rem
             img
                 width: 15rem
                 border-radius: 1rem

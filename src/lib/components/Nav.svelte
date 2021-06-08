@@ -132,6 +132,10 @@
             }
         }
     }
+
+    const openUserMenuToggle = e => {
+        document.querySelector('.userMenuToggle').classList.toggle('desactive');
+    }
 </script>
 
 {#if user || auth}
@@ -233,8 +237,7 @@
                              {:else}
                                 <i class="fas fa-user-circle"></i>
                                 <p class="bugged">{user.username}</p>
-                             {/if}
-                             
+                             {/if}                            
                          </article>
                     {/each}
                 {/if}
@@ -245,19 +248,62 @@
                 <p>Crear</p>
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </button>
-            <div class="userMenu" on:click={()=>goto(`/perfil/${user}`)}>
+            <div class="userMenu" on:click={openUserMenuToggle}>
                 {#if allUsers}
                     <img src={allUsers.filter(x=>x.username===user)[0]['avatar']} alt="My Avatar">
                 {:else}
                     <i class="fas fa-user-circle"></i>
                 {/if}
                 <p>{user}</p>
+                <ul class="userMenuToggle desactive">
+                    <li on:click={()=>goto(`/perfil/${user}`)}>
+                        <i class="fas fa-user"></i>
+                        <p>Ir a mi perfil</p>
+                    </li>
+                    <li on:click={closeSession}>
+                        <i class="fas fa-power-off"></i>
+                        <p>Cerrar sessión</p>
+                    </li>
+                </ul>
             </div>
         {/if}
     </div>
 </nav>
 
 <style lang="sass">
+    .desactive
+        display: none !important
+    .userMenuToggle
+        position: absolute
+        top: 130%
+        left: -10%
+        width: 150%
+        padding: 0.5rem 0rem
+        background: white
+        border-radius: 1rem
+        box-shadow: 0 4px 1px rgba(0,0,0,.3)
+        display: flex
+        flex-direction: column
+        gap: 0.5rem
+        li
+            list-style: none
+            display: flex
+            justify-content: center
+            align-items: center
+            gap: 0.5rem
+            font-size: 0.8rem
+            color: black
+            padding: 0.3rem 0
+            transition: 0.3s
+            width: 100%
+            &:nth-child(1)
+                margin-top: 0.5rem
+            &:nth-child(2):hover
+                color: red
+            &:hover
+                background: rgba(0,0,0,.1)
+            i
+                font-size: 0.8rem
     .closeSession
         display: flex
         gap: 1rem
@@ -288,6 +334,7 @@
         gap: 0.5rem
         align-items: center
         cursor: pointer
+        position: relative
         i
             font-size: 2rem
         img
