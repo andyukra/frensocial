@@ -5,7 +5,17 @@ export async function get({headers, query}) {
     if(!headers.referer) return null;
     let publicaciones;
 
-    if(query.get('type') && /^[a-zA-Z]+$/.test(query.get('type') && query.get('pag') && (typeof query.get('pag') === 'number'))) {
+    if(query.get('key') && query.get('pag')){
+        publicaciones = await publications.find({author: query.get('key')}).sort({time: -1}).skip((query.get('pag') - 1) * 10).limit(query.get('pag') * 10);
+        return {
+            status: 200,
+            body: {
+                data: publicaciones
+            }
+        }
+    }
+
+    if(query.get('type') && /^[a-zA-Z]+$/.test(query.get('type') && query.get('pag'))) {
         if(query.get('type') === 'todo'){
             publicaciones = await publications.find().sort({time: -1}).skip((query.get('pag') - 1) * 10).limit(query.get('pag') * 10);
         } else {

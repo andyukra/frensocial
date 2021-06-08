@@ -16,7 +16,7 @@
         yo.set(session.user);
 
         if(!pub || !usr) {
-            const res = await fetch('/getPublications?key=all&pag=1');
+            const res = await fetch('/getPublications?pag=1');
         
             if(res.ok) {
                 const result = await res.json();

@@ -1,5 +1,5 @@
 <script context="module">
-    import { publicaciones, usuarios } from "$lib/store";
+    import { uniquePubs, usuarios } from "$lib/store";
 
     export async function load({page, session, fetch}) {
 
@@ -15,26 +15,23 @@
 
         user = await res.json();
 
-        publicaciones.subscribe(val => publications = val);
+        uniquePubs.subscribe(val => publications = val);
         usuarios.subscribe(val => allUsers = val);
 
-        if(!publications) {
-            const res2 = await fetch('/getPublications');
-            const res3 = await fetch('/getUser?key=all');
+        const res2 = await fetch(`/getPublications?key=${page.params.key}&pag=1`);
+        const res3 = await fetch('/getUser?key=all');
 
-            if(!res2.ok || !res3.ok) {
-                return {
-                    status: 404
-                }
+        if(!res2.ok || !res3.ok) {
+            return {
+                status: 404
             }
+        }
 
-            publications = await res2.json();
-            allUsers = await res3.json();
+        publications = await res2.json();
+        allUsers = await res3.json();
 
-            publicaciones.set(publications.data);
-            usuarios.set(allUsers.usuarios);
-
-        } 
+        uniquePubs.set(publications.data);
+        usuarios.set(allUsers.usuarios); 
 
         if(!session.authenticated) {
             return {
@@ -121,7 +118,7 @@
 
 <h2 class="myPublicationsText">Mis publicaciones</h2>
 
-<Publications />
+<Publications profile={user?.username}/>
 
 <style lang="sass">
     .myPublicationsText
