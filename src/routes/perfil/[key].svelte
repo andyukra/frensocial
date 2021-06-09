@@ -55,8 +55,10 @@
     export let auth;
     export let user;
     import Publications from "$lib/components/Publications.svelte";
+    import ModalImg from '$lib/components/ModalImg.svelte';
 
     let files;
+    let imagen = '';
 
     const changeAvatar = () => {
         if(!auth) return null;
@@ -98,18 +100,25 @@
 </script>
 
 <section>
+    <ModalImg imagen={imagen}/>
     <div class="perfil">
         <div class="imgBox">
             {#if auth}
                 <input type="file" bind:files on:change={changeAvatar} id="changeAvatar" hidden>
             {/if}
-            <label for="changeAvatar">
+            <div class="imgEdit">
+                <div class="avatarOpts">
+                    <label for="changeAvatar">
+                        <i class="fas fa-edit"></i>
+                    </label>
+                    <i class="fas fa-eye" on:click={()=>imagen=user.avatar}></i>
+                </div>
                 {#if user?.avatar}
                     <img src={user.avatar} alt="Avatar Perfil">
                 {:else}
                     <i class="fa fa-user-circle"></i>
                 {/if}
-            </label>
+            </div>
             <h2>{user?.username}</h2>
             <p>{user?.email}</p>
         </div>
@@ -121,6 +130,27 @@
 <Publications profile={user?.username}/>
 
 <style lang="sass">
+    .avatarOpts
+        width: 100%
+        height: 100%
+        background: rgba(0,0,0,.5)
+        position: absolute
+        top: 0
+        left: 0
+        border-radius: 100%
+        align-items: center
+        display: flex
+        justify-content: space-around
+        transform: translateX(11rem)
+        opacity: 0
+        transition: 0.2s
+        i
+            font-size: 1.5rem !important
+            color: rgba(255,255,255,0.5)
+            transition: 0.3s
+            &:hover
+                color: white
+                text-shadow: 0 0 5px #6C63FF 
     .myPublicationsText
         text-align: center
         margin: 1rem 0
@@ -142,7 +172,14 @@
                 i
                     font-size: 10rem
                     cursor: pointer
-                label
+                .imgEdit
+                    width: 10rem
+                    height: 10rem
+                    position: relative
+                    overflow: hidden
+                    &:hover > .avatarOpts
+                        transform: translateX(0)
+                        opacity: 1
                     img
                         object-fit: cover
                         width: 10rem

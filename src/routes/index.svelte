@@ -15,7 +15,7 @@
         usuarios.subscribe(val => usr = val);
 
         if(!pub || !usr){
-            const res = await fetch('/getPublications?pag=1');
+            const res = await fetch('/getPublications?type=todo&pag=1');
         
             if(res.ok) {
                 const result = await res.json();
@@ -125,7 +125,7 @@
     </div>
 </section>
 
-<Publications/>
+<Publications place={'index'} />
 
 <style lang="sass">
     section
