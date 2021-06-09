@@ -325,14 +325,17 @@
         .body
             margin: 1.5rem 0
             .descOrWatch
+                p
+                    font-family: 'Fugaz One', cursive
                 iframe
                     margin-top: 0.7rem
                     width: 100%
                     border-radius: 0.5rem
+                    box-shadow: 0 4px 10px 0 transparentize(#6C63FF, 0.55)
             img
                 width: 15rem
                 border-radius: 1rem
-                box-shadow: 0 4px 10px 0 rgba(0,0,0,.1)
+                box-shadow: 0 4px 10px 0 transparentize(#6C63FF, 0.55)
                 margin: 1rem 0
                 cursor: pointer
         .footer

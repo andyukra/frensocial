@@ -16,7 +16,7 @@
         yo.set(session.user);
 
         if(!pub || !usr) {
-            const res = await fetch('/getPublications?pag=1');
+            const res = await fetch('/getPublications?pag=1&type=todo');
         
             if(res.ok) {
                 const result = await res.json();
@@ -48,7 +48,7 @@
 
     const getAndSetPubsType = async e => {
         const type = e.detail.key;
-        const res = await fetch(`/getPublications?type=${type}`);
+        const res = await fetch(`/getPublications?type=${type}&pag=1`);
         if(res.ok){
             publicaciones.set(0);
             const result = await res.json();

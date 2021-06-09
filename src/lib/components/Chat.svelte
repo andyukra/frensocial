@@ -65,7 +65,7 @@
         top: 4rem
         padding: 2rem
         border-radius: 2rem
-        box-shadow: 0px 4px 35px 4px rgb(0 0 0 / 10%)
+        box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
         @media (max-width: 500px)
             display: none
         button

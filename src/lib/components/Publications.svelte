@@ -140,7 +140,7 @@ import { deprecationHandler } from "moment";
         margin: auto
         padding: 1rem
         background: white
-        box-shadow: 0px 4px 35px 4px rgba(0,0,0,.1)
+        box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
         border-radius: 1.5rem
         @media (max-width: 500px)
             width: auto

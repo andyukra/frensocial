@@ -15,7 +15,7 @@ export async function get({headers, query}) {
         }
     }
 
-    if(query.get('type') && /^[a-zA-Z]+$/.test(query.get('type') && query.get('pag'))) {
+    if(query.get('type') && query.get('pag') && /^[a-zA-Z]+$/.test(query.get('type'))) {
         if(query.get('type') === 'todo'){
             publicaciones = await publications.find().sort({time: -1}).skip((query.get('pag') - 1) * 10).limit(10);
         } else {
