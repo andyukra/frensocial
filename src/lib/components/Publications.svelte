@@ -145,4 +145,5 @@ import { deprecationHandler } from "moment";
         @media (max-width: 800px)
             width: 100%
             margin-left: 0
+            margin-top: 8rem
 </style>

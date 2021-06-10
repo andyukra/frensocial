@@ -2,11 +2,24 @@
     import { yo, usuarios, msgsChat } from '$lib/store';
     import { io } from 'socket.io-client';
     import MsgsChat from '$lib/components/MsgsChat.svelte';
+    import { onMount } from 'svelte';
 
     let myFoto, socket, inputChatText;
     const socketServidor = 'https://frensocialchat.herokuapp.com';
     let state = false;
     let loader = false;
+    let movilVersion = false;
+
+    onMount(() => {
+        if(window.innerWidth < 800) movilVersion = true;
+        window.addEventListener('resize', () => {
+            if(window.innerWidth < 800) {
+                movilVersion = true;
+            } else {
+                movilVersion = false;
+            }
+        })
+    });
 
     $: if($usuarios.length > 0) {
         myFoto = $usuarios.filter(x=>x.username===$yo)[0]['avatar'];
@@ -50,9 +63,14 @@
 
         inputChatText = '';
     }
+
+    const toggleChatBox = () => {
+        let chatBox = document.querySelector('.chatBox');
+        chatBox.classList.toggle('responsiveChat');
+    }
 </script>
 
-<section>
+<section class="chatBox responsiveChat">
     <div class="btnConnect">
         <h4>Mini chat</h4>
         <button on:click={connectChat}>
@@ -64,9 +82,15 @@
                 <i class="fa fa-minus-circle"></i>
             {/if}
         </button>
+        {#if movilVersion}
+            <i class="fas fa-angle-down btnToggleChat" on:click={toggleChatBox}></i>
+        {:else}
+            <i class="fas fa-angle-down btnToggleChat" style="display:none;"></i>
+        {/if}
     </div>
     {#if state}
         <div class="chat">
+            <p style="font-size: 0.8rem">Bienvenido al chat de Frensocial®, diviertete!!</p>
             {#if $msgsChat.length > 0}
                 {#each $msgsChat as msg}
                     <MsgsChat data={msg}/>
@@ -103,6 +127,19 @@
 
 <style lang="sass">
 
+    .responsiveChat
+        position: absolute !important
+        min-height: 0 !important
+
+    .btnToggleChat
+        padding: 0.4rem 0.62rem
+        background: #6C63FF
+        border-radius: 100%
+        color: white
+        transition: 0.3s
+        cursor: pointer
+        &:hover
+            box-shadow: 0 0 5px 2px transparentize(#6C63FF, 0.3)
     .noChat
         width: 100%
         height: 75vh
@@ -120,7 +157,7 @@
         overflow-y: auto
         width: 100%
         height: 75vh
-        background: transparentize(#6C63FF, 0.6)
+        background: transparentize(#6C63FF, 1)
         margin-top: 0.5rem
         border-radius: 0.5rem
         padding: 0.7rem
@@ -165,11 +202,18 @@
         right: 0
         top: 4rem
         padding: 2rem
-        border-radius: 2rem
+        border-radius: 1.5rem
         box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
         @media (max-width: 800px)
-            display: none
+            position: fixed
+            top: 4rem
+            width: 100%
+            min-height: 100vh
+            height: 7vh
+            overflow: hidden
+            padding: 0.3rem 2rem 0 2rem
         .btnConnect
+            margin-top: 0.3rem
             display: flex
             align-items: center
             justify-content: space-between
