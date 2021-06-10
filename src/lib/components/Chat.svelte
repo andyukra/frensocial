@@ -6,6 +6,7 @@
     let myFoto, socket, inputChatText;
     const socketServidor = 'https://frensocialchat.herokuapp.com';
     let state = false;
+    let loader = false;
 
     $: if($usuarios.length > 0) {
         myFoto = $usuarios.filter(x=>x.username===$yo)[0]['avatar'];
@@ -13,13 +14,12 @@
 
     $: if(!socket?.connected) {
         state = false;
-        console.log('DESCONECTADO');
     }
 
     $: try {
         socket.on('connected', () => {
             state = true;
-            console.log('CONECTADO');
+            loader = false;
         });
 
         socket.on('receive', data => {
@@ -32,6 +32,7 @@
     const connectChat = () => {
         if(!state){
             socket = io(socketServidor, { transports: ["websocket"] });
+            loader = true;
         } else {
             socket.close();
             state = false;
@@ -48,7 +49,6 @@
         });
 
         inputChatText = '';
-        console.log(inputChatText)
     }
 </script>
 
@@ -75,8 +75,13 @@
         </div>
     {:else}
         <div class="noChat">
-            <p>El chat está desconectado</p>
-            <i class="fas fa-unlink"></i>
+            {#if loader}
+                <p>Conectando...</p>
+                <i class="fas fa-circle-notch fa-spin"></i>
+            {:else}
+                <p>El chat está desconectado</p>
+                <i class="fas fa-unlink"></i>
+            {/if}
         </div>
     {/if}
     {#if state}

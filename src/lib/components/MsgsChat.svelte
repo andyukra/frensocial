@@ -1,5 +1,12 @@
 <script>
+    import { onMount } from "svelte";
+
     export let data;
+
+    onMount(() => {
+        let shat = document.querySelector('.chat');
+        shat.scrollTop = shat.scrollHeight;
+    });
 </script>
 
 <article>
@@ -26,7 +33,7 @@
             font-size: 0.7rem
             font-family: 'Fugaz One', cursive
             margin: 0.85rem 0
-            padding: 0.7rem
+            padding: 0.3rem 0.5rem
             background: white
             border-radius: 1rem
             box-shadow: 0 0 4px 1px transparentize(#6C63FF, 0.6)

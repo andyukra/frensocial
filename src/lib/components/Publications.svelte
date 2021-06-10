@@ -144,4 +144,5 @@ import { deprecationHandler } from "moment";
         border-radius: 1.5rem
         @media (max-width: 800px)
             width: 100%
+            margin-left: 0
 </style>
