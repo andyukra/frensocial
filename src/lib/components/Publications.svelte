@@ -126,22 +126,22 @@ import { deprecationHandler } from "moment";
         background: #6C63FF
         border-radius: 100%
         color: white
-        box-shadow: 0 0 10px rgba(0,0,0,.5)
+        box-shadow: 0 0 10px transparentize(#6C63FF, 0.55)
         cursor: pointer
         transform: scale(0)
         transition: 0.3s
         z-index: 999
-        @media(max-width: 500)
+        @media(max-width: 500px)
             bottom: 3%
         &:hover
             background: darken(#6C63FF, 20%)
     section
         width: 50%
-        margin: auto
+        margin-left: 16%
         padding: 1rem
         background: white
         box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
         border-radius: 1.5rem
-        @media (max-width: 500px)
-            width: auto
+        @media (max-width: 800px)
+            width: 100%
 </style>

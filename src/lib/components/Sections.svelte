@@ -57,9 +57,9 @@
         margin-right: 1rem
         border-radius: 1.5rem
         box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
-        width: 24%
+        width: 15%
         min-height: 100vh
-        @media (max-width: 500px)
+        @media (max-width: 800px)
             display: none
         h4
             margin: 2rem 0 1rem 2rem

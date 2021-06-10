@@ -160,7 +160,7 @@
             margin: 5rem 0
             padding: 1rem
             background: white
-            box-shadow: 0 4px 32px 0 rgba(0,0,0,.1)
+            box-shadow: 0 4px 32px 0 transparentize(#6C63FF, 0.55)
             .imgBox
                 width: 100%
                 display: flex

@@ -29,6 +29,7 @@
 		"cookie": "^0.4.1",
 		"moment": "^2.29.1",
 		"mongoose": "raphaelschwinger/mongoose#fix-import",
+		"socket.io-client": "^4.1.2",
 		"string-hash": "^1.1.3"
 	}
 }

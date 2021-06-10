@@ -11,3 +11,5 @@ export const yo = writable(0);
 export const pag = writable(2);
 
 export const uniquePubs = writable(0);
+
+export const msgsChat = writable([]);
