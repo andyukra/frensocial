@@ -22,8 +22,8 @@ import { deprecationHandler } from "moment";
             } else {
                 upPage.style.transform = 'scale(0)';
             }
-            let val1 = Math.floor(window.innerHeight + window.scrollY - 64);
-            let val2 = val1 + 1;
+            let val1 = Math.floor(window.innerHeight + window.scrollY - 63);
+            let val2 = val1 - 65;
             let val3 = val1 - 15;
             let val4 = val1 - 16;
             let val5 = val1 - 47;
@@ -50,7 +50,9 @@ import { deprecationHandler } from "moment";
             }
             
             if(!profile){
+                console.log(val1, val2, '--------', document.body.offsetHeight);
                 if(val1 === document.body.offsetHeight || val2 === document.body.offsetHeight){
+                    console.log(val1, val2, '--------', document.body.offsetHeight);
                     if(!state){
                         return null;
                     }
@@ -95,7 +97,7 @@ import { deprecationHandler } from "moment";
     }
 </script>
 
-<section>
+<section style={profile ? 'margin: auto;' : 'margin-left: 16%;'}>
     <i class="fas fa-angle-up" on:click={upScroll}></i>
     <ModalImg imagen={imagen}/>
     {#if !profile}
@@ -137,13 +139,12 @@ import { deprecationHandler } from "moment";
             background: darken(#6C63FF, 20%)
     section
         width: 50%
-        margin-left: 16%
         padding: 1rem
         background: white
         box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
         border-radius: 1.5rem
         @media (max-width: 800px)
             width: 100%
-            margin-left: 0
+            margin-left: 0 !important
             margin-top: 8rem
 </style>

@@ -70,7 +70,7 @@
     }
 </script>
 
-<section class="chatBox responsiveChat">
+<section class={movilVersion ? 'chatBox responsiveChat' : 'chatBox'}>
     <div class="btnConnect">
         <h4>Mini chat</h4>
         <button on:click={connectChat}>
@@ -128,8 +128,8 @@
 <style lang="sass">
 
     .responsiveChat
-        position: absolute !important
-        min-height: 0 !important
+        position: absolute
+        min-height: 0
 
     .btnToggleChat
         padding: 0.4rem 0.62rem
@@ -199,6 +199,7 @@
         min-height: 100vh
         width: 32.5%
         background: white
+        z-index: 99
         right: 0
         top: 4rem
         padding: 2rem

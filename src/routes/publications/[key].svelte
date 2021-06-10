@@ -1,13 +1,13 @@
 <script context='module'>
-    import { publicaciones, usuarios } from '$lib/store';
+    import { publicaciones, uniquePubs, usuarios } from '$lib/store';
 
     export async function load({page, fetch, session}) {
-        let data, search, allUsers, search2, allUsersParsed;
+        let data, search, allUsers, allUsersParsed;
 
         publicaciones.subscribe( val => data = val);
         usuarios.subscribe( val => allUsers = val);
 
-        if(data || allUsers) {
+        if(data && allUsers) {
             search = data.filter(x => x._id === page.params.key);
             allUsersParsed = await allUsers.reduce((acc, i) => ({
                 ...acc,
@@ -56,6 +56,8 @@
     import {goto} from '$app/navigation';
     import moment from 'moment';
     import {onMount} from 'svelte';
+
+    if(data.length === 0 || !data) data = $uniquePubs;
 
     let comment;
 

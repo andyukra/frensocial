@@ -289,7 +289,7 @@
                 position: relative
                 .moreOptsBox
                     display: block
-                    padding: 1rem
+                    padding: 1rem 0
                     background: lighten(#aaeeff, 12%)
                     position: absolute
                     left: -7rem
@@ -300,12 +300,12 @@
                         list-style: none
                         display: flex
                         gap: 0.8rem
+                        width: 100%
                         font-size: 0.8rem
                         align-items: center
                         cursor: pointer
                         transition: 0.3s
                         padding: 0.7rem 1.5rem
-                        border-radius: 1rem
                         &:hover
                             background: rgba(0,0,0,.1)
                         i
