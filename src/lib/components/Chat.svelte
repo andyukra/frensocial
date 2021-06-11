@@ -249,7 +249,6 @@
         height: 70vh
         background: transparentize(#6C63FF, 1)
         border-radius: 0.5rem
-        padding: 0.7rem
         display: none
         @media (max-width: 800px)
             height: 67vh
