@@ -4,7 +4,7 @@
     import Loader from '$lib/components/Loader.svelte';
     import ModalImg from '$lib/components/ModalImg.svelte';
     import { onMount } from 'svelte';
-import { deprecationHandler } from "moment";
+
     export let auth;
     export let profile;
     export let place;
@@ -50,9 +50,7 @@ import { deprecationHandler } from "moment";
             }
             
             if(!profile){
-                console.log(val1, val2, '--------', document.body.offsetHeight);
                 if(val1 === document.body.offsetHeight || val2 === document.body.offsetHeight){
-                    console.log(val1, val2, '--------', document.body.offsetHeight);
                     if(!state){
                         return null;
                     }
@@ -132,7 +130,7 @@ import { deprecationHandler } from "moment";
         cursor: pointer
         transform: scale(0)
         transition: 0.3s
-        z-index: 999
+        z-index: 98
         @media(max-width: 500px)
             bottom: 3%
         &:hover

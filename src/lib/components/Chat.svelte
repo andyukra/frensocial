@@ -6,9 +6,12 @@
 
     let myFoto, socket, inputChatText;
     const socketServidor = 'https://frensocialchat.herokuapp.com';
+    const servidorDePrueba = 'http://localhost:5000';
     let state = false;
     let loader = false;
     let movilVersion = false;
+    let chatUsers = [];
+    let stateChatToggle = false;
 
     onMount(() => {
         if(window.innerWidth < 800) movilVersion = true;
@@ -29,22 +32,29 @@
         state = false;
     }
 
-    $: try {
-        socket.on('connected', () => {
-            state = true;
-            loader = false;
-        });
-
+    $: if(state) {
         socket.on('receive', data => {
             msgsChat.update(val => val.concat(data));
         });
-    } catch (error) {
-        
+
+        socket.on('updateUsers', data => {
+            chatUsers = [...data];
+        });
+
+        socket.on('newUser', data => {
+            chatUsers = [...data];
+        });
     }
 
     const connectChat = () => {
         if(!state){
-            socket = io(socketServidor, { transports: ["websocket"] });
+            socket = io(servidorDePrueba, { transports: ["websocket"], query: {user: $yo} });
+            socket.on('connected', data => {
+                chatUsers = [...data];
+                console.log(chatUsers)
+                state = true;
+                loader = false;
+            });
             loader = true;
         } else {
             socket.close();
@@ -65,23 +75,57 @@
     }
 
     const toggleChatBox = () => {
+        stateChatToggle = !stateChatToggle;
         let chatBox = document.querySelector('.chatBox');
+        let sendMsg = document.querySelectorAll('.sendMsg');
         chatBox.classList.toggle('responsiveChat');
+        document.body.classList.toggle('bodyBlockScroll');
+        sendMsg.forEach(x => {
+            x.classList.toggle('dBlock2');
+        });
+        try {
+            let chat = document.querySelector('.chat');
+            chat.classList.toggle('dBlock');
+        } catch (error) {}
     }
 </script>
 
 <section class={movilVersion ? 'chatBox responsiveChat' : 'chatBox'}>
     <div class="btnConnect">
         <h4>Mini chat</h4>
-        <button on:click={connectChat}>
-            {#if !state}
-                Conectar chat
-                <i class="fa fa-plus-circle"></i>
-            {:else}
-                Desconectar chat
-                <i class="fa fa-minus-circle"></i>
-            {/if}
-        </button>
+        {#if movilVersion}
+            {#if stateChatToggle}
+            <button on:click={connectChat}>
+                {#if !state}
+                    Conectar chat
+                    <i class="fa fa-plus-circle"></i>
+                {:else}
+                    Desconectar chat
+                    <i class="fa fa-minus-circle"></i>
+                {/if}
+            </button>
+        {:else}
+            <button disabled>
+                {#if !state}
+                    Conectar chat
+                    <i class="fa fa-plus-circle"></i>
+                {:else}
+                    Desconectar chat
+                    <i class="fa fa-minus-circle"></i>
+                {/if}
+            </button>
+    {/if}
+        {:else}
+            <button on:click={connectChat}>
+                {#if !state}
+                    Conectar chat
+                    <i class="fa fa-plus-circle"></i>
+                {:else}
+                    Desconectar chat
+                    <i class="fa fa-minus-circle"></i>
+                {/if}
+            </button>
+        {/if}
         {#if movilVersion}
             <i class="fas fa-angle-down btnToggleChat" on:click={toggleChatBox}></i>
         {:else}
@@ -89,7 +133,22 @@
         {/if}
     </div>
     {#if state}
-        <div class="chat">
+        <div class="usersList">
+            <ul>
+                {#each chatUsers as user}
+                    <li>
+                        {#if $usuarios.filter(x=>x.username===user)[0].avatar}
+                            <img src={$usuarios.filter(x=>x.username===user)[0].avatar} alt="user Avatar">
+                        {:else}
+                            <i class="fas fa-user-circle"></i>
+                        {/if}
+                    </li>
+                {/each}
+            </ul>
+        </div>
+    {/if}
+    {#if state}
+        <div class="chat dBlock">
             <p style="font-size: 0.8rem">Bienvenido al chat de Frensocial®, diviertete!!</p>
             {#if $msgsChat.length > 0}
                 {#each $msgsChat as msg}
@@ -109,14 +168,14 @@
         </div>
     {/if}
     {#if state}
-        <form class="sendMsg" on:submit|preventDefault={sendChatMsg}>
+        <form class="sendMsg dBlock2" on:submit|preventDefault={sendChatMsg}>
             <input bind:value={inputChatText} type="text" maxlength="100" placeholder="Escribe un mensaje" required>
             <button type="submit">
                 <i class="fa fa-paper-plane"></i>
             </button>
         </form>
     {:else}
-        <div class="sendMsg">
+        <div class="sendMsg dBlock2">
             <input type="text" maxlength="50" placeholder="Escribe un mensaje" required disabled>
             <button disabled>
                 <i class="fa fa-paper-plane"></i>
@@ -126,6 +185,35 @@
 </section>
 
 <style lang="sass">
+
+    .usersList
+        margin-top: 0.9rem
+        ul
+            display: flex
+            gap: 0.7rem
+            width: 100%
+            overflow-x: auto
+            padding: 0.2rem
+            li
+                list-style: none
+                img
+                    width: 2rem
+                    height: 2rem
+                    box-shadow: 0 0 5px transparentize(#6C63FF, 0.5)
+                    border-radius: 100%
+                    cursor: pointer
+                i
+                    font-size: 2rem
+                    box-shadow: 0 0 5px transparentize(#6C63FF, 0.5)
+                    border-radius: 100%
+                    cursor: pointer
+
+
+    .dBlock
+        display: block !important
+
+    .dBlock2
+        display: flex !important
 
     .responsiveChat
         position: absolute
@@ -148,6 +236,8 @@
         align-items: center
         justify-content: center
         gap: 5rem
+        @media (max-width: 800px)
+            height: 71.5vh
         p
             font-size: 1.5rem
             text-align: center
@@ -156,16 +246,17 @@
     .chat
         overflow-y: auto
         width: 100%
-        height: 75vh
+        height: 70vh
         background: transparentize(#6C63FF, 1)
-        margin-top: 0.5rem
         border-radius: 0.5rem
         padding: 0.7rem
-
+        display: none
+        @media (max-width: 800px)
+            height: 67vh
     .sendMsg
         margin-top: 0.5rem
         width: 100%
-        display: flex
+        display: none
         align-items: center
         justify-content: space-between
         gap: 1rem

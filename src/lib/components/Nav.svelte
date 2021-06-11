@@ -209,7 +209,7 @@
                     <i class="fa fa-plus-circle" aria-hidden="true"></i>
                 </button>
                 <div class="userMenu" on:click={()=>goto(`/perfil/${user}`)}>
-                    {#if allUsers}
+                    {#if allUsers && allUsers.filter(x=>x.username===user)[0]['avatar']}
                         <img src={allUsers.filter(x=>x.username===user)[0]['avatar']} alt="My Avatar">
                     {:else}
                         <i class="fas fa-user-circle"></i>
@@ -249,7 +249,7 @@
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </button>
             <div class="userMenu" on:click={openUserMenuToggle}>
-                {#if allUsers}
+                {#if allUsers && allUsers.filter(x=>x.username===user)[0]['avatar']}
                     <img src={allUsers.filter(x=>x.username===user)[0]['avatar']} alt="My Avatar">
                 {:else}
                     <i class="fas fa-user-circle"></i>
