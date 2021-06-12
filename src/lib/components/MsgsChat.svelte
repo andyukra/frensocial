@@ -34,7 +34,7 @@
                 width: 2rem
                 height: 2rem
                 border-radius: 100%
-                box-shadow: 0 0 15px 1px transparentize(#6C63FF, 0.3)
+                box-shadow: 0 0 5px transparentize(#6C63FF, 0.3)
                 cursor: pointer
         p
             font-size: 0.7rem

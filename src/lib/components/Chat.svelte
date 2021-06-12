@@ -2,7 +2,7 @@
     import { yo, usuarios, msgsChat } from '$lib/store';
     import { io } from 'socket.io-client';
     import MsgsChat from '$lib/components/MsgsChat.svelte';
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
 
     let myFoto, socket, inputChatText;
     const socketServidor = 'https://frensocialchat.herokuapp.com';
@@ -22,6 +22,12 @@
                 movilVersion = false;
             }
         })
+    });
+
+    onDestroy(() => {
+        try {
+            socket.close();
+        } catch (error) {}
     });
 
     $: if($usuarios.length > 0) {
