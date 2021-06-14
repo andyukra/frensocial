@@ -1,5 +1,8 @@
 <script>
     export let imagen;
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
 
     $: if(imagen){
         let modal = document.querySelector('.modalImg');
@@ -11,6 +14,7 @@
     const closeModal = e => {
         let modal = document.querySelector('.modalImg');
         modal.style.display = 'none';
+        dispatch('closeModal');
     }
 </script>
 

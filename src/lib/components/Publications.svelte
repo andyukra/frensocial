@@ -22,35 +22,11 @@
             } else {
                 upPage.style.transform = 'scale(0)';
             }
-            let val1 = Math.floor(window.innerHeight + window.scrollY - 63);
-            let val2 = val1 - 65;
-            let val3 = val1 - 15;
-            let val4 = val1 - 16;
-            let val5 = val1 - 47;
-            let val6 = val1 - 48;
+            let val1 = Math.floor(window.innerHeight + window.scrollY);
             let res;
-
-            if(place){
-                if(val5 === document.body.offsetHeight || val6 === document.body.offsetHeight){
-                    if(!state){
-                        return null;
-                    }
-                    state = false;
-                    res = await fetch(`/getPublications?type=${$seccion}&pag=${$pag}`);
-                    if(res.ok){
-                        const result = await res.json();
-                        if(result.data && result.data.length > 0) {
-                            publicaciones.update(val => val.concat(result.data));
-                            $pag++;
-                            setTimeout(()=>state=true, 3000)
-                        }
-                        return null;   
-                    }                              
-                }
-            }
             
             if(!profile){
-                if(val1 === document.body.offsetHeight || val2 === document.body.offsetHeight){
+                if(val1 === document.querySelector('html').offsetHeight){
                     if(!state){
                         return null;
                     }
@@ -67,7 +43,7 @@
                     }                              
                 }   
             } else {
-                if(val4 === document.body.offsetHeight || val3 === document.body.offsetHeight){
+                if(val1 === document.querySelector('html').offsetHeight){
                     if(!state){
                         return null;
                     }
@@ -95,9 +71,9 @@
     }
 </script>
 
-<section style={profile ? 'margin: auto;' : 'margin-left: 16%;'}>
+<section style={(profile || place) ? 'margin: auto;' : 'margin-left: 16%;'}>
     <i class="fas fa-angle-up" on:click={upScroll}></i>
-    <ModalImg imagen={imagen}/>
+    <ModalImg imagen={imagen} on:closeModal={()=>imagen=''}/>
     {#if !profile}
         {#if $publicaciones}
             {#each $publicaciones as item}
