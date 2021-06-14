@@ -12,6 +12,7 @@
     let movilVersion = false;
     let chatUsers = [];
     let stateChatToggle = false;
+    let connectingBtn = false;
 
     onMount(() => {
         if(window.innerWidth < 800) movilVersion = true;
@@ -53,13 +54,15 @@
     }
 
     const connectChat = () => {
-        if(!state){
+        if(!state && !connectingBtn){
+            connectingBtn = true;
             socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo} });
             socket.on('connected', data => {
                 chatUsers = [...data];
                 console.log(chatUsers)
                 state = true;
                 loader = false;
+                connectingBtn = false;
             });
             loader = true;
         } else {
@@ -69,12 +72,12 @@
     }
 
     const sendChatMsg = () => {
-        if(/[&{}|<>]/.test(inputChatText) || typeof inputChatText !== 'string' || inputChatText.length === 0 || !state || !socket.connected) return null;
+        if(/[{}|<>]/.test(inputChatText) || typeof inputChatText !== 'string' || inputChatText.length === 0 || !state || !socket.connected) return null;
 
         socket.emit('send', {
             user: $yo,
             avatar: myFoto,
-            text: inputChatText
+            text: inputChatText.trim()
         });
 
         inputChatText = '';
