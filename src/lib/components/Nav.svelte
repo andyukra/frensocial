@@ -103,7 +103,7 @@
                     body: JSON.stringify({
                         image: result.data.url,
                         thumb: result.data.thumb.url,
-                        description: descrip,
+                        description: descrip.trim(),
                         type
                     })
                 });
@@ -119,7 +119,7 @@
             const res2 = await fetch('/publish', {
                 method: 'POST',
                 body: JSON.stringify({
-                    description: descrip,
+                    description: descrip.trim(),
                     type
             })
             });
