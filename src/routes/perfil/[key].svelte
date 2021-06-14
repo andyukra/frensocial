@@ -57,7 +57,9 @@
     import Publications from "$lib/components/Publications.svelte";
     import ModalImg from '$lib/components/ModalImg.svelte';
 
-    document.body.classList.add('bodyBlockScroll');
+    try {
+        document.body.classList.add('bodyBlockScroll');
+    } catch (error) {}
 
     let files;
     let imagen = '';
