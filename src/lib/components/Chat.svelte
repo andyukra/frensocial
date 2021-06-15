@@ -186,10 +186,12 @@
             <button type="submit">
                 <i class="fa fa-paper-plane"></i>
             </button>
-            <input type="file" id="imgChatcito" hidden bind:files on:change={upImg}>
-            <label for="imgChatcito">
-                <i class="fas fa-image"></i>
-            </label>
+            {#if false}
+                <input type="file" id="imgChatcito" hidden bind:files on:change={upImg}>
+                <label for="imgChatcito">
+                    <i class="fas fa-image"></i>
+                </label>
+            {/if}
         </form>
     {:else}
         <div class="sendMsg dBlock2">
