@@ -56,7 +56,7 @@
         background: white
         margin-right: 1rem
         border-radius: 1.5rem
-        box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
+        box-shadow: 0px 4px 20px 1px transparentize(#6C63FF, 0.55)
         width: 15%
         min-height: 100vh
         @media (max-width: 800px)

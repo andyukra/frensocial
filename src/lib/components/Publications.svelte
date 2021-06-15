@@ -22,7 +22,7 @@
             } else {
                 upPage.style.transform = 'scale(0)';
             }
-            let val1 = Math.floor(window.innerHeight + window.scrollY);
+            let val1 = window.innerHeight + window.scrollY;
             let res;
             
             if(!profile){
@@ -115,7 +115,7 @@
         width: 50%
         padding: 1rem
         background: white
-        box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
+        box-shadow: 0px 4px 20px 1px transparentize(#6C63FF, 0.55)
         border-radius: 1.5rem
         @media (max-width: 800px)
             width: 100%

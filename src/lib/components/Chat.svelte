@@ -4,7 +4,7 @@
     import MsgsChat from '$lib/components/MsgsChat.svelte';
     import { onMount, onDestroy } from 'svelte';
 
-    let myFoto, socket, inputChatText;
+    let myFoto, socket, inputChatText, files;
     const socketServidor = 'https://frensocialchat.herokuapp.com';
     const servidorDePrueba = 'http://localhost:5000';
     let state = false;
@@ -59,7 +59,6 @@
             socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo} });
             socket.on('connected', data => {
                 chatUsers = [...data];
-                console.log(chatUsers)
                 state = true;
                 loader = false;
                 connectingBtn = false;
@@ -96,6 +95,11 @@
             let chat = document.querySelector('.chat');
             chat.classList.toggle('dBlock');
         } catch (error) {}
+    }
+
+    const upImg = () => {
+        if(!files[0] || !/(jpg|png|jpeg)$/.test(files[0].type) || files[0].size > 5000000) return null;
+        console.log(files[0]);
     }
 </script>
 
@@ -182,6 +186,10 @@
             <button type="submit">
                 <i class="fa fa-paper-plane"></i>
             </button>
+            <input type="file" id="imgChatcito" hidden bind:files on:change={upImg}>
+            <label for="imgChatcito">
+                <i class="fas fa-image"></i>
+            </label>
         </form>
     {:else}
         <div class="sendMsg dBlock2">
@@ -255,12 +263,10 @@
     .chat
         overflow-y: auto
         width: 100%
-        height: 70vh
+        height: 65vh
         background: transparentize(#6C63FF, 1)
         border-radius: 0.5rem
         display: none
-        @media (max-width: 800px)
-            height: 67vh
     .sendMsg
         margin-top: 0.5rem
         width: 100%
@@ -268,6 +274,14 @@
         align-items: center
         justify-content: space-between
         gap: 1rem
+        position: relative
+        label
+            position: absolute
+            left: 80%
+            color: white
+            cursor: pointer
+            &:hover
+                color: #6C63FF
         input
             width: 100%
             padding: 0.5rem
@@ -295,7 +309,7 @@
                 
     section
         position: fixed
-        min-height: 100vh
+        height: 91vh
         width: 32.5%
         background: white
         z-index: 99
@@ -303,12 +317,12 @@
         top: 4rem
         padding: 2rem
         border-radius: 1.5rem
-        box-shadow: 0px 4px 35px 4px transparentize(#6C63FF, 0.55)
+        box-shadow: 0px 4px 20px 1px transparentize(#6C63FF, 0.55)
         @media (max-width: 800px)
             position: fixed
             top: 4rem
             width: 100%
-            min-height: 100vh
+            min-height: 90vh
             height: 7vh
             overflow: hidden
             padding: 0.3rem 2rem 0 2rem
