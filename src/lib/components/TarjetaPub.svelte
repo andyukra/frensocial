@@ -81,13 +81,13 @@
      const parseDescription = text => {
         if(/https\:\/\/(www\.)?youtu\.be/.test(text)) {
             return [
-                text.replace(/https\:\/\/(www\.)?youtu\.be(.)*\b/, ''),
-                `https://www.youtube.com/embed/${text.match(/...........$/)}`
+                text.replace(/https\:\/\/(www\.)?youtu\.be\/(...........)/g, ''),
+                `https://www.youtube.com/embed/${text.match(/https\:\/\/(www\.)?youtu\.be\/(...........)/)[0].replace(/https\:\/\/(www\.)?youtu\.be\//, '')}`
             ]
         }
         if(/https\:\/\/(www\.)?youtube/.test(text)) {
             return [
-                text.replace(/https\:\/\/(www\.)?youtube(.)*\b/, ''),
+                text.replace(text.match(/https\:\/\/(www\.)?youtube(.)*/)[0].match(/[^\s]*/), ''),
                 `https://www.youtube.com/embed/${text.match(/v\=.........../)[0].replace('v=', '')}`
             ]
         }

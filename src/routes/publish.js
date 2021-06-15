@@ -11,7 +11,8 @@ export async function post({ body, context }) {
         }
     }
 
-    const { image, type, description, thumb } = JSON.parse(body);
+    let { image, type, description, thumb } = JSON.parse(body);
+    description = description.trim();
     let newPublication;
 
     if (!description || /[{}|<>]/.test(description) || description.length > 250) {
