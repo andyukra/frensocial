@@ -56,7 +56,7 @@
     const connectChat = () => {
         if(!state && !connectingBtn){
             connectingBtn = true;
-            socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo} });
+            socket = io(servidorDePrueba, { transports: ["websocket"], query: {user: $yo} });
             socket.on('connected', data => {
                 chatUsers = [...data];
                 state = true;
@@ -97,9 +97,20 @@
         } catch (error) {}
     }
 
-    const upImg = () => {
+    const upImg = async () => {
         if(!files[0] || !/(jpg|png|jpeg)$/.test(files[0].type) || files[0].size > 5000000) return null;
-        console.log(files[0]);
+        let form = new FormData();
+        form.append('file', files[0]);
+        const res = await fetch(`${servidorDePrueba}/upImg`, {
+            method: 'POST',
+            body: form,
+
+        });
+        if(res.ok){
+            const result = await res.text();
+            inputChatText = result;
+            sendChatMsg();
+        }
     }
 </script>
 
@@ -182,28 +193,40 @@
     {/if}
     {#if state}
         <form class="sendMsg dBlock2" on:submit|preventDefault={sendChatMsg}>
-            <input bind:value={inputChatText} type="text" maxlength="100" placeholder="Escribe un mensaje" required>
-            <button type="submit">
-                <i class="fa fa-paper-plane"></i>
-            </button>
-            {#if false}
+            <div class="formGroup">
+                <input bind:value={inputChatText} type="text" maxlength="100" placeholder="Escribe un mensaje" required>
                 <input type="file" id="imgChatcito" hidden bind:files on:change={upImg}>
                 <label for="imgChatcito">
                     <i class="fas fa-image"></i>
                 </label>
-            {/if}
-        </form>
-    {:else}
-        <div class="sendMsg dBlock2">
-            <input type="text" maxlength="50" placeholder="Escribe un mensaje" required disabled>
-            <button disabled>
+            </div>
+            <button type="submit">
                 <i class="fa fa-paper-plane"></i>
             </button>
-        </div>
+        </form>
+    {:else}
+        <div></div>
     {/if}
 </section>
 
 <style lang="sass">
+
+    .formGroup
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: space-between
+        background: rgba(108, 99, 255, 0.4)
+        padding: 0.7rem
+        border-radius: 1rem
+        input
+            border: none
+            font-family: 'Fugaz One', cursive
+            background: transparent
+            &:focus
+                outline: none
+        i
+            color: black
 
     .usersList
         margin-top: 0.9rem
@@ -278,23 +301,13 @@
         gap: 1rem
         position: relative
         label
-            position: absolute
-            left: 80%
             color: white
             cursor: pointer
             &:hover
                 color: #6C63FF
-        input
-            width: 100%
-            padding: 0.5rem
-            border-radius: 0.5rem
-            border: none
-            background: transparentize(#6C63FF, 0.6)
-            font-family: 'Fugaz One', cursive
-            &:focus
-                outline: none
         button
             border: none
+            border-radius: 100%
             &:focus
                 outline: none
             & > i

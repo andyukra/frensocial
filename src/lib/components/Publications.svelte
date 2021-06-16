@@ -22,11 +22,11 @@
             } else {
                 upPage.style.transform = 'scale(0)';
             }
-            let val1 = window.innerHeight + window.scrollY;
+            let val1 = Math.floor(window.innerHeight + window.scrollY);
             let res;
             
             if(!profile){
-                if(val1 === document.querySelector('html').offsetHeight){
+                if(val1 === document.querySelector('html').offsetHeight || ((val1 + 1) === document.querySelector('html').offsetHeight)){
                     if(!state){
                         return null;
                     }
@@ -43,7 +43,7 @@
                     }                              
                 }   
             } else {
-                if(val1 === document.querySelector('html').offsetHeight){
+                if(val1 === document.querySelector('html').offsetHeight || ((val1 + 1) === document.querySelector('html').offsetHeight)){
                     if(!state){
                         return null;
                     }

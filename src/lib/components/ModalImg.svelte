@@ -1,20 +1,24 @@
 <script>
     export let imagen;
     import { createEventDispatcher } from "svelte";
+    import { modalOn } from '$lib/store';
 
     const dispatch = createEventDispatcher();
+
 
     $: if(imagen){
         let modal = document.querySelector('.modalImg');
         let imgModal = document.querySelector('.modalImg img');
         imgModal.src = imagen;
         modal.style.display = 'flex';
+        modalOn.set(true);
     }
 
     const closeModal = e => {
         let modal = document.querySelector('.modalImg');
         modal.style.display = 'none';
         dispatch('closeModal');
+        modalOn.set(false);
     }
 </script>
 

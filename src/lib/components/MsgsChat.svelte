@@ -1,16 +1,26 @@
 <script>
     import { onMount } from "svelte";
-
+    import { modalOn } from '$lib/store';
+    import ModalImg from '$lib/components/ModalImg.svelte';
     export let data;
+
+    let type = 'text';
+    let imagen = '';
+
+    $: if(!$modalOn) imagen = '';
 
     onMount(() => {
         let shat = document.querySelector('.chat');
         shat.scrollTop = shat.scrollHeight;
     });
+
+    if(/^http\:\/\/(.)*(\.jpg|\.png|\.jpeg)$/.test(data.text)) {
+        type = 'img';
+    }
 </script>
 
 <article>
-
+    <ModalImg imagen={imagen}/>
     {#if data.avatar}
         <img src={data.avatar} alt="avatar of sender">
     {:else}
@@ -18,12 +28,24 @@
     {/if}
     <div class="user-msg">
         <h5>{data.user}</h5>          
-        <p>{data.text}</p>
+        {#if type === 'text'}
+            <p>{data.text}</p>
+        {:else if  type === 'img'}
+            <img src={data.text} on:click={()=>imagen=data.text} alt="imagen subida" class="imgChatcito">
+        {:else}
+            <div></div>
+        {/if}
     </div>
 
 </article>
 
 <style lang="sass">
+
+    .imgChatcito
+        margin-top: 0.5rem
+        width: 50%
+        height: 100%
+        border-radius: 0.5rem
 
     article
         margin: 0.7rem 0
