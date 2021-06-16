@@ -14,7 +14,7 @@
         shat.scrollTop = shat.scrollHeight;
     });
 
-    if(/^http\:\/\/(.)*(\.jpg|\.png|\.jpeg)$/.test(data.text)) {
+    if(/^https\:\/\/(.)*(\.jpg|\.png|\.jpeg)$/.test(data.text)) {
         type = 'img';
     }
 </script>
