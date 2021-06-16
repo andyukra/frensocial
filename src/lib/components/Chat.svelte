@@ -56,7 +56,7 @@
     const connectChat = () => {
         if(!state && !connectingBtn){
             connectingBtn = true;
-            socket = io(servidorDePrueba, { transports: ["websocket"], query: {user: $yo} });
+            socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo} });
             socket.on('connected', data => {
                 chatUsers = [...data];
                 state = true;
