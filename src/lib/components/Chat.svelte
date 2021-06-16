@@ -101,7 +101,7 @@
         if(!files[0] || !/(jpg|png|jpeg)$/.test(files[0].type) || files[0].size > 5000000) return null;
         let form = new FormData();
         form.append('file', files[0]);
-        const res = await fetch(`${servidorDePrueba}/upImg`, {
+        const res = await fetch(`${socketServidor}/upImg`, {
             method: 'POST',
             body: form,
 
