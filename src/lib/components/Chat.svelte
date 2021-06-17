@@ -15,6 +15,15 @@
     let connectingBtn = false;
 
     onMount(() => {
+        socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo} });
+        loader = true;
+        connectingBtn = true;
+        socket.on('connected', data => {
+                chatUsers = [...data];
+                state = true;
+                loader = false;
+                connectingBtn = false;
+        });
         if(window.innerWidth < 800) movilVersion = true;
         window.addEventListener('resize', () => {
             if(window.innerWidth < 800) {
@@ -62,7 +71,7 @@
                 state = true;
                 loader = false;
                 connectingBtn = false;
-            });
+             });
             loader = true;
         } else {
             socket.close();
@@ -114,6 +123,7 @@
     }
 </script>
 
+<i class="far fa-comment-alt btnToggleChat off" on:click={toggleChatBox}></i>
 <section class={movilVersion ? 'chatBox responsiveChat' : 'chatBox'}>
     <div class="btnConnect">
         <h4>Mini chat</h4>
@@ -172,7 +182,7 @@
         </div>
     {/if}
     {#if state}
-        <div class="chat dBlock">
+        <div class="chat">
             <p style="font-size: 0.8rem">Bienvenido al chat de Frensocial®, diviertete!!</p>
             {#if $msgsChat.length > 0}
                 {#each $msgsChat as msg}
@@ -192,7 +202,7 @@
         </div>
     {/if}
     {#if state}
-        <form class="sendMsg dBlock2" on:submit|preventDefault={sendChatMsg}>
+        <form class="sendMsg" on:submit|preventDefault={sendChatMsg}>
             <div class="formGroup">
                 <input bind:value={inputChatText} type="text" maxlength="100" placeholder="Escribe un mensaje" required>
                 <input type="file" id="imgChatcito" hidden bind:files on:change={upImg}>
@@ -210,6 +220,19 @@
 </section>
 
 <style lang="sass">
+
+    .off
+        position: fixed
+        right: 7%
+        bottom: 15%
+        padding: 0.8rem !important
+        animation: tintin 0.7s ease-out infinite !important
+
+    @keyframes tintin
+        0%
+            box-shadow: 0 0 0 #6C63FF
+        100%
+            box-shadow: 0 0 15px 5px #6C63FF
 
     .formGroup
         width: 100%
@@ -250,16 +273,11 @@
                     border-radius: 100%
                     cursor: pointer
 
-
-    .dBlock
-        display: block !important
-
-    .dBlock2
-        display: flex !important
-
     .responsiveChat
         position: absolute
         min-height: 0
+        transform: scale(0)
+        opacity: 0
 
     .btnToggleChat
         padding: 0.4rem 0.62rem
@@ -291,11 +309,13 @@
         height: 65vh
         background: transparentize(#6C63FF, 1)
         border-radius: 0.5rem
-        display: none
+        display: block
+        @media (max-width: 800px)
+            height: 70vh
     .sendMsg
         margin-top: 0.5rem
         width: 100%
-        display: none
+        display: flex
         align-items: center
         justify-content: space-between
         gap: 1rem
@@ -335,12 +355,15 @@
         box-shadow: 0px 4px 20px 1px transparentize(#6C63FF, 0.55)
         @media (max-width: 800px)
             position: fixed
-            top: 4rem
+            inset: 0
+            z-index: 100
             width: 100%
-            min-height: 90vh
-            height: 7vh
+            height: 100vh
             overflow: hidden
             padding: 0.3rem 2rem 0 2rem
+            transform: scale(1)
+            opacity: 1
+            transition: 0.2s
         .btnConnect
             margin-top: 0.3rem
             display: flex

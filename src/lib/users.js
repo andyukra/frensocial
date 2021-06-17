@@ -39,6 +39,10 @@ const user = new Schema({
     avatar: {
         type: String,
         default: ''
+    },
+    descrip: {
+        type: String,
+        default: ''
     }
 });
 

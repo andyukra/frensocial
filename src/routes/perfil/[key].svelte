@@ -61,8 +61,9 @@
         document.body.classList.add('bodyBlockScroll');
     } catch (error) {}
 
-    let files;
+    let files, descrip;
     let imagen = '';
+    let stateDescrip = false;
 
     const changeAvatar = () => {
         if(!auth) return null;
@@ -85,7 +86,7 @@
             .then(response => response.json())
             .then(result => {
                 if(result.status === 200){
-                    fetch('/changeAvatar', {
+                    fetch('/personalize?key=avatar', {
                         method: 'POST',
                         body: JSON.stringify({
                             image: result.data.display_url
@@ -101,6 +102,25 @@
                 }
             })
     }
+
+    const changeDescrip = async () => {
+        if(stateDescrip){
+            if(!descrip || /[<>|{}]/.test(descrip) || descrip.length > 300) {
+                stateDescrip = false;
+                return null;
+            }
+            const res = await fetch('/personalize?key=descrip', {
+                method: 'POST',
+                body: JSON.stringify({
+                    descrip
+                })
+            });
+            if(res.ok){
+                location.href = location.href;
+            }
+        }
+        stateDescrip = true;
+    }
 </script>
 
 <section>
@@ -112,9 +132,11 @@
             {/if}
             <div class="imgEdit">
                 <div class="avatarOpts">
-                    <label for="changeAvatar">
-                        <i class="fas fa-edit"></i>
-                    </label>
+                    {#if auth}
+                        <label for="changeAvatar">
+                            <i class="fas fa-edit"></i>
+                        </label>
+                    {/if}
                     <i class="fas fa-eye" on:click={()=>imagen=user.avatar}></i>
                 </div>
                 {#if user?.avatar}
@@ -124,7 +146,16 @@
                 {/if}
             </div>
             <h2>{user?.username}</h2>
-            <p>{user?.email}</p>
+            <div class="descrip">
+                {#if stateDescrip}
+                    <input bind:value={descrip} placeholder={user?.descrip} maxlength="300"/>
+                {:else}
+                    <p>{user?.descrip}</p>
+                {/if}
+                {#if auth}
+                    <i class="fas fa-edit" on:click={changeDescrip}></i> 
+                {/if}
+            </div>
         </div>
     </div>
 </section>
@@ -134,6 +165,30 @@
 <Publications profile={user?.username}/>
 
 <style lang="sass">
+    .descrip
+        width: 90%
+        word-break: break-word
+        margin: auto
+        display: flex
+        justify-content: center
+        align-items: center
+        gap: 1rem
+        & > input
+            width: 45%
+            font-family: inherit
+            padding: 0.1rem
+            border: none
+            border-bottom: 2px solid #6C63FF
+            &:focus
+                outline: none
+            @media (max-width: 800px)
+                width: 95%
+        i
+            font-size: 1rem !important
+            color: grey
+            transition: 0.2s
+            &:hover
+                color: #6C63FF
     .avatarOpts
         width: 100%
         height: 100%
@@ -177,10 +232,14 @@
                     font-size: 10rem
                     cursor: pointer
                 .imgEdit
-                    width: 10rem
-                    height: 10rem
+                    width: 10.5rem
+                    height: 10.5rem
                     position: relative
                     overflow: hidden
+                    display: flex
+                    justify-content: center
+                    align-items: center
+                    border-radius: 50%
                     &:hover > .avatarOpts
                         transform: translateX(0)
                         opacity: 1
@@ -190,7 +249,7 @@
                         height: 10rem
                         border-radius: 50%
                         cursor: pointer
-                        box-shadow: 0 2px 10px 0 rgba(0,0,0,.3)
+                        box-shadow: 0 2px 4px 0 transparentize(#6C63FF, 0.55)
                 h2
                     margin: 1rem 0
 </style>

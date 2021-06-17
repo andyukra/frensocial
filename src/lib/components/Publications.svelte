@@ -120,5 +120,5 @@
         @media (max-width: 800px)
             width: 100%
             margin-left: 0 !important
-            margin-top: 8rem
+            margin-top: 4rem
 </style>
