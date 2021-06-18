@@ -124,7 +124,7 @@
 </script>
 
 <i class="far fa-comment-alt btnToggleChat off" on:click={toggleChatBox}></i>
-<section class={movilVersion ? 'chatBox responsiveChat' : 'chatBox'} transition:rebotin>
+<section class={movilVersion ? 'chatBox responsiveChat' : 'chatBox'}>
     <div class="btnConnect">
         <h4>Mini chat</h4>
         {#if movilVersion}
