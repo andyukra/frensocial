@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { modalOn } from '$lib/store';
     import ModalImg from '$lib/components/ModalImg.svelte';
+    import { elasticOut } from "svelte/easing";
     export let data;
 
     let type = 'text';
@@ -17,9 +18,19 @@
     if(/^https\:\/\/(.)*(\.jpg|\.png|\.jpeg)$/.test(data.text)) {
         type = 'img';
     }
+
+    function rebotin(node, {duration = 1000}) {
+        return {
+            css: t => `
+                transform: translateX(calc(4rem - (4rem * ${t})));
+            `,
+            duration,
+            easing: elasticOut
+        }
+    }
 </script>
 
-<article>
+<article transition:rebotin>
     <ModalImg imagen={imagen}/>
     {#if data.avatar}
         <img src={data.avatar} alt="avatar of sender">
@@ -48,7 +59,7 @@
         border-radius: 0.5rem
 
     article
-        margin: 0.7rem 0
+        margin: 0.9rem 0
         display: flex
         align-items: start
         gap: 0.5rem
@@ -59,7 +70,7 @@
                 box-shadow: 0 0 5px transparentize(#6C63FF, 0.3)
                 cursor: pointer
         p
-            font-size: 0.7rem
+            font-size: 0.9rem
             font-family: 'Fugaz One', cursive
             padding: 0.18rem 0.5rem
             margin-top: 0.5rem
@@ -75,7 +86,8 @@
                 left: 0.7rem
                 width: 0.5rem
                 height: 0.5rem
-                background: transparentize(#6C63FF, 0.5)
+                background: white
+                box-shadow: 0 0 3px #6C63FF
                 transform: rotateZ(45deg)
                 z-index: -1
 

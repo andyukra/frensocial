@@ -124,7 +124,7 @@
 </script>
 
 <i class="far fa-comment-alt btnToggleChat off" on:click={toggleChatBox}></i>
-<section class={movilVersion ? 'chatBox responsiveChat' : 'chatBox'}>
+<section class={movilVersion ? 'chatBox responsiveChat' : 'chatBox'} transition:rebotin>
     <div class="btnConnect">
         <h4>Mini chat</h4>
         {#if movilVersion}
@@ -181,7 +181,8 @@
             </ul>
         </div>
     {/if}
-    {#if state}
+    <div class="pruebaGrid">
+        {#if state}
         <div class="chat">
             <p style="font-size: 0.8rem">Bienvenido al chat de Frensocial®, diviertete!!</p>
             {#if $msgsChat.length > 0}
@@ -201,38 +202,52 @@
             {/if}
         </div>
     {/if}
-    {#if state}
-        <form class="sendMsg" on:submit|preventDefault={sendChatMsg}>
-            <div class="formGroup">
-                <input bind:value={inputChatText} type="text" maxlength="100" placeholder="Escribe un mensaje" required>
-                <input type="file" id="imgChatcito" hidden bind:files on:change={upImg}>
-                <label for="imgChatcito">
-                    <i class="fas fa-image"></i>
-                </label>
-            </div>
-            <button type="submit">
-                <i class="fa fa-paper-plane"></i>
-            </button>
-        </form>
-    {:else}
-        <div></div>
-    {/if}
+        {#if state}
+            <form class="sendMsg" on:submit|preventDefault={sendChatMsg}>
+                <div class="formGroup">
+                    <input bind:value={inputChatText} type="text" maxlength="100" placeholder="Escribe un mensaje" required>
+                    <input type="file" id="imgChatcito" hidden bind:files on:change={upImg}>
+                    <div class="btnsPost">
+                        <label for="imgChatcito">
+                            <i class="fas fa-image"></i>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit">
+                    <i class="fa fa-paper-plane"></i>
+                </button>
+            </form>
+        {:else}
+            <div></div>
+        {/if}
+    </div>
 </section>
 
 <style lang="sass">
+
+    .btnsPost
+        display: flex
+        gap: 0.8rem
+        i
+            cursor: pointer
+
+    .pruebaGrid
+        height: 85%
+        display: grid
+        grid-template-rows: 1fr auto
 
     .off
         position: fixed
         right: 7%
         bottom: 15%
         padding: 0.8rem !important
-        animation: tintin 0.7s ease-out infinite !important
+        animation: tintin 1s ease-out infinite
 
     @keyframes tintin
         0%
             box-shadow: 0 0 0 #6C63FF
         100%
-            box-shadow: 0 0 15px 5px #6C63FF
+            box-shadow: 0 0 15px 1px #6C63FF
 
     .formGroup
         width: 100%
@@ -246,6 +261,7 @@
             border: none
             font-family: 'Fugaz One', cursive
             background: transparent
+            width: 84%
             &:focus
                 outline: none
         i
@@ -305,13 +321,14 @@
             font-size: 10rem
     .chat
         overflow-y: auto
+        overflow-x: hidden
         width: 100%
         height: 65vh
         background: transparentize(#6C63FF, 1)
         border-radius: 0.5rem
         display: block
         @media (max-width: 800px)
-            height: 70vh
+            height: 100%
     .sendMsg
         margin-top: 0.5rem
         width: 100%
@@ -365,7 +382,7 @@
             opacity: 1
             transition: 0.2s
         .btnConnect
-            margin-top: 0.3rem
+            margin-top: 0.8rem
             display: flex
             align-items: center
             justify-content: space-between
