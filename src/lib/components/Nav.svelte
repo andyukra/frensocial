@@ -91,7 +91,7 @@
             let form = new FormData();
             form.set('image', files[0]);
 
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${import.meta.env.IMG_API}`, {
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMG_API}`, {
                 method: 'POST',
                 body: form
             });
