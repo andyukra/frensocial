@@ -91,7 +91,7 @@
             let form = new FormData();
             form.set('image', files[0]);
 
-            const res = await fetch('https://api.imgbb.com/1/upload?key=579f935dc936016e8e8217246bd6d65f', {
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.IMG_API}`, {
                 method: 'POST',
                 body: form
             });
@@ -165,7 +165,8 @@
                                 <option value="politica">Política</option>
                                 <option value="chismes">Chismes</option>
                                 <option value="quejas">Quejas</option>
-                                <option value="peleas">Peleas</option>
+                                <option value="memes">Peleas</option>
+                                <option value="chistes">Chistes</option>
                             </select>
                         </div>
                     </div>

@@ -11,12 +11,12 @@
         top: 0
         left: 0
         z-index: 1001
-        background: rgba(0,0,0,.9)
-        backdrop-filter: blur(5px)
+        background: transparentize(#6C63FF, 0.8)
+        backdrop-filter: blur(7px)
         display: flex
         justify-content: center
         align-items: center
-        color: white
+        color: black
         flex-direction: column
         i
             font-size: 5rem

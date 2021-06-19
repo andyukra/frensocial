@@ -37,9 +37,9 @@
             <img src="/chismes.jpg" alt="imagen de chismes">
             Chismes
         </div>
-        <div class="card" on:click={e=>setSection('peleas', e)}>
+        <div class="card" on:click={e=>setSection('memes', e)}>
             <img src="/peleas.jpg" alt="imagen de peleas">
-            Peleas
+            Memes
         </div>
         <div class="card" on:click={e=>setSection('chistes', e)}>
             <img src="/chistes.jpg" alt="imagen de chistes">

@@ -3,11 +3,13 @@
     import { usuarios, yo } from "$lib/store";
     import { onDestroy, createEventDispatcher } from "svelte";
     import { goto } from '$app/navigation';
+    import { elasticOut } from "svelte/easing";
     export let data;
 
-    const {item, avatar} = data;
+    let {item, avatar} = data;
     let comment, allUsers, YO;
     let commentsBoxState = 0;
+    let commentLoader = false;
     const dispatch = createEventDispatcher();
 
     const unsubscribe = usuarios.subscribe(val => allUsers = val);
@@ -33,15 +35,22 @@
             alert('Error de envío');
             return null;
         }
+        commentLoader = true;
         const res = await fetch('/postComment', {
             method: 'POST',
             body: JSON.stringify({comment, id:item._id})
         });
         if(res.ok){
             const result = await res.json();
+            commentLoader = false;
             if(result.message === 'success'){
-                location.href = '/home';
+                item.comments = [...item.comments, {
+                    text: comment,
+                    author: $yo,
+                    time: Date.now()
+                }];
             }
+            comment = '';
         }
      }
 
@@ -93,6 +102,16 @@
         }
         return null;
      }
+
+     function rebotin(node, {duration = 1000}) {
+        return {
+            css: t => `
+                transform: translateX(calc(4rem - (4rem * ${t})));
+            `,
+            duration,
+            easing: elasticOut
+        }
+    }
 </script>
 
 <article data-type={item.type}>
@@ -160,7 +179,7 @@
             <p>No hay comentarios</p>
         {:else}
             {#each item.comments as comentario}
-                <div class="comment">
+                <div class="comment" transition:rebotin>
                     <div class="author">
                         {#if allUsers.filter(x=>x.username===comentario.author)[0].avatar}
                             <img src={allUsers.filter(x=>x.username===comentario.author)[0].avatar} alt="author avatar">
@@ -176,25 +195,37 @@
                 </div>        
             {/each}
         {/if}
-        {#if data.auth}
-            <div class="commentsPost">
-                {#if allUsers.filter(x=>x.username===$yo)[0].avatar}
-                    <img src={allUsers.filter(x=>x.username===$yo)[0].avatar} alt="Imagen de perfil">
-                {:else}
-                    <i class="fas fa-user-circle"></i>
-                {/if}
-                <form on:submit|preventDefault={postComment}>
-                    <input type="text" placeholder="Escribe un comentario..." maxlength="100" minlength="1" bind:value={comment}>
-                    <button>
-                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                    </button>
-                </form>
-            </div>
+        {#if data.auth}       
+            {#if commentLoader}
+                <div class="commentLoader">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                </div>
+            {:else}
+                <div class="commentsPost">               
+                    {#if allUsers.filter(x=>x.username===$yo)[0].avatar}
+                        <img src={allUsers.filter(x=>x.username===$yo)[0].avatar} alt="Imagen de perfil">
+                    {:else}
+                        <i class="fas fa-user-circle"></i>
+                    {/if}
+                    <form on:submit|preventDefault={postComment}>
+                        <input type="text" placeholder="Escribe un comentario..." maxlength="100" minlength="1" bind:value={comment}>
+                        <button>
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+            {/if}
         {/if}
     </div>
 </article>
 
 <style lang="sass">
+    .commentLoader
+        display: flex
+        justify-content: center
+        margin-top: 1rem
+        & > i
+            font-size: 2rem
     .open
         display: none !important
     article
