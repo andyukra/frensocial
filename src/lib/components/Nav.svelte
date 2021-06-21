@@ -165,7 +165,7 @@
                                 <option value="politica">Política</option>
                                 <option value="chismes">Chismes</option>
                                 <option value="quejas">Quejas</option>
-                                <option value="memes">Peleas</option>
+                                <option value="memes">Memes</option>
                                 <option value="chistes">Chistes</option>
                             </select>
                         </div>

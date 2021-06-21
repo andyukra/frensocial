@@ -6,7 +6,7 @@
 
     let myFoto, socket, inputChatText, files;
     const socketServidor = 'https://frensocialchat.herokuapp.com';
-    const servidorDePrueba = 'http://localhost:5000';
+    const servidorPrueba = 'http://localhost:5000';
     let state = false;
     let loader = false;
     let movilVersion = false;
@@ -15,7 +15,7 @@
     let connectingBtn = false;
 
     onMount(() => {
-        socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo} });
+        socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo}, reconnection: false });
         loader = true;
         connectingBtn = true;
         socket.on('connected', data => {
@@ -65,7 +65,7 @@
     const connectChat = () => {
         if(!state && !connectingBtn){
             connectingBtn = true;
-            socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo} });
+            socket = io(socketServidor, { transports: ["websocket"], query: {user: $yo}, reconnection: false });
             socket.on('connected', data => {
                 chatUsers = [...data];
                 state = true;
@@ -94,16 +94,8 @@
     const toggleChatBox = () => {
         stateChatToggle = !stateChatToggle;
         let chatBox = document.querySelector('.chatBox');
-        let sendMsg = document.querySelectorAll('.sendMsg');
         chatBox.classList.toggle('responsiveChat');
         document.body.classList.toggle('bodyBlockScroll');
-        sendMsg.forEach(x => {
-            x.classList.toggle('dBlock2');
-        });
-        try {
-            let chat = document.querySelector('.chat');
-            chat.classList.toggle('dBlock');
-        } catch (error) {}
     }
 
     const upImg = async () => {
@@ -176,6 +168,7 @@
                         {:else}
                             <i class="fas fa-user-circle"></i>
                         {/if}
+                        <p>{user}</p>
                     </li>
                 {/each}
             </ul>
@@ -235,7 +228,8 @@
         height: 85%
         display: grid
         grid-template-rows: 1fr auto
-
+        @media (max-width: 800px)
+            height: 80%
     .off
         position: fixed
         right: 7%
@@ -277,6 +271,17 @@
             padding: 0.2rem
             li
                 list-style: none
+                display: flex
+                flex-direction: column
+                justify-content: center
+                align-items: center
+                p
+                    font-size: 0.5rem
+                    margin-top: 0.3rem
+                    padding: 0.15rem
+                    background: #141414
+                    color: white
+                    border-radius: 0.3rem
                 img
                     width: 2rem
                     height: 2rem
@@ -323,14 +328,10 @@
         overflow-y: auto
         overflow-x: hidden
         width: 100%
-        height: 65vh
         background: transparentize(#6C63FF, 1)
         border-radius: 0.5rem
-        display: block
-        @media (max-width: 800px)
-            height: 100%
+        display: block        
     .sendMsg
-        margin-top: 0.5rem
         width: 100%
         display: flex
         align-items: center
@@ -382,10 +383,11 @@
             opacity: 1
             transition: 0.2s
         .btnConnect
-            margin-top: 0.8rem
             display: flex
             align-items: center
             justify-content: space-between
+            @media (max-width: 800px)
+                margin-top: 0.7rem
             button
                 border-radius: 1rem
                 border: none

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const {connect, disconnect} = mongoose;
 
-connect(`mongodb+srv://${import.meta.env.VITE_DB_USER}:${import.meta.env.VITE_DB_PASS}@cluster0.dwsam.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {
+connect(`mongodb+srv://andyukra:salamaleiku@cluster0.dwsam.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
