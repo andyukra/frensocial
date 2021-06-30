@@ -4,6 +4,7 @@ import StringHash from 'string-hash';
 import cookie from 'cookie';
 
 export async function post({body}){
+    return null;
     let { username, password } = JSON.parse(body);
     if(username.length < 3 || username.length > 25 || password.length < 3 || password.length > 25) {
         return {

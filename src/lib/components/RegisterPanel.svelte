@@ -6,7 +6,7 @@
     let username, password, rePassword, email;
 
     const sendRegister = () => {
-        username.trim();
+        /*username.trim();
         password.trim();
         if(password !== rePassword){
             alert('Las contraseñas no coinciden');
@@ -28,7 +28,8 @@
                 if(message === 'exists') alert('Ese usuario ya existe');
             })
             .catch(err => console.error(err));
-        username = ''; password = ''; rePassword = ''; email = '';
+        username = ''; password = ''; rePassword = ''; email = '';*/
+        location.href = '/';
     }
 
     onMount(() => {
