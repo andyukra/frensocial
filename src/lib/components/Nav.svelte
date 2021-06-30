@@ -13,11 +13,13 @@
     onDestroy(unsubscribe);
 
     onMount(() => {
+        const buzonToggle = document.querySelectorAll('.fa-sms');
         const searchBoxs = document.querySelectorAll('.searchBoxs');
         const boxsUsers = document.querySelectorAll('.boxUsers');
         const closeMenu = document.querySelector('.closeMenu');
         const menuPhoneScreen = document.querySelector('.menuPhoneScreen');
         const menuPhone = document.querySelector('.menuPhone');
+        const buzon = document.querySelectorAll('.buzon');
         try {
             const postModal = document.querySelector('.postModal');
             const closeModal = document.querySelector('.closeModal');
@@ -35,15 +37,20 @@
             imgUp.addEventListener('change', e => {
                 document.querySelector('.fa-image').style.color = '#6C63FF';
             });
-        } catch (error) {
-            
-        }
+        } catch (error) {}
+        buzonToggle.forEach(x => {
+            x.addEventListener('click', () => {
+                buzon.forEach(x => {
+                    x.classList.toggle('desactive');
+                });
+            });
+        });
         closeMenu.addEventListener('click', () => {
             menuPhoneScreen.style.left = '-100vw';
         });
         menuPhone.addEventListener('click', () => {
             menuPhoneScreen.style.left = '0';
-        })
+        });
         searchBoxs.forEach(x => {
             x.addEventListener('keyup', () => {
                 if(x.value.length === 0) {
@@ -136,6 +143,11 @@
     const openUserMenuToggle = e => {
         document.querySelector('.userMenuToggle').classList.toggle('desactive');
     }
+
+    const sendMensajito = (e, user) => {
+        e.stopImmediatePropagation();
+        console.log(user);
+    }
 </script>
 
 {#if user || auth}
@@ -197,7 +209,7 @@
                                 <i class="fas fa-user-circle"></i>
                                 <p class="bugged">{user.username}</p>
                              {/if}
-                             
+                             <i class="fas fa-comment-medical" on:click={e=>sendMensajito(e, user.username)}></i>  
                          </article>
                     {/each}
                 {/if}
@@ -205,6 +217,15 @@
         </div>
         {#if auth && user}
             <div class="navOptsPhone">
+                <div class="sms">
+                    <i class="fas fa-sms" style="margin-right:0.5rem;"></i> Buzón
+                    <div class="buzon desactive">
+                        <h3>Buzón de mensajes</h3>
+                        <div class="mensajitos">
+                            <h3>Usted no tiene mensajes</h3>
+                        </div>
+                    </div>
+                </div>
                 <button class="postBtn">
                     <p>Crear</p>
                     <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -238,13 +259,23 @@
                              {:else}
                                 <i class="fas fa-user-circle"></i>
                                 <p class="bugged">{user.username}</p>
-                             {/if}                            
+                             {/if}
+                             <i class="fas fa-comment-medical" on:click={e=>sendMensajito(e, user.username)}></i>                           
                          </article>
                     {/each}
                 {/if}
             </div>
         </div>
         {#if auth && user}
+            <div class="sms">
+                <i class="fas fa-sms"></i>
+                <div class="buzon desactive">
+                    <h3>Buzón de mensajes</h3>
+                    <div class="mensajitos">
+                        <h3>Usted no tiene mensajes</h3>
+                    </div>
+                </div>
+            </div>
             <button class="postBtn">
                 <p>Crear</p>
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -272,6 +303,36 @@
 </nav>
 
 <style lang="sass">
+    .sms
+        position: relative
+        .fa-sms
+            font-size: 1.5rem
+            color: blue
+            cursor: pointer
+        .buzon
+            position: absolute
+            z-index: 100
+            top: 165%
+            left: -300%
+            width: 20rem
+            height: 20rem
+            border-radius: 1rem
+            background: white
+            box-shadow: 0 0 4px 1px rgba(0,0,0,.2)
+            display: block
+            .mensajitos
+                width: 100%
+                height: 90%
+                display: flex
+                flex-direction: column
+                justify-content: center
+                align-items: center
+            @media (max-width: 800px)
+                left: -41%
+            h3
+                text-align: center
+                margin-top: 0.5rem
+                font-size: 1rem
     .desactive
         display: none !important
     .userMenuToggle
@@ -513,7 +574,7 @@
         z-index: 500
         top: 170%
         left: -50%
-        width: 150%
+        width: 200%
         height: 15rem
         overflow-x: hidden
         overflow-y: auto
@@ -533,6 +594,14 @@
             padding: 0 0.5rem
             border-radius: 2rem
             height: 3rem
+            .fa-comment-medical
+                position: absolute
+                right: 1rem
+                z-index: 130
+                cursor: pointer
+                transition: 0.5s
+                &:hover
+                    color: #6C63FF
             &:hover
                 background: rgba(0,0,0,.1)
             i

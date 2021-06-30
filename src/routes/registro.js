@@ -3,7 +3,7 @@ import users from '$lib/users';
 import StringHash from 'string-hash';
 import cookie from 'cookie';
 
-export async function post({body}) {
+export async function post({body, headers}) {
     let { username, password, email } = JSON.parse(body);
     if(username.length < 3 || username.length > 25 || password.length < 3 || password.length > 25 || email.length < 3 || email.length > 100) {
         return {
@@ -11,6 +11,14 @@ export async function post({body}) {
             body: {
                 message: 'Error en el registro'
             }
+        }
+    }
+
+    if(/ped[o0]/ig.test(username)) {
+        console.log(headers)
+        return {
+            headers: {Location: 'https://www.semana.com/mundo/articulo/hombre-que-violo-y-mato-a-pedofilo-en-una-celda-sonrio-al-escuchar-el-veredicto-en-su-contra/202036/'},
+            status: 302
         }
     }
 
@@ -36,7 +44,7 @@ export async function post({body}) {
         }
     }
 
-    const headers = {
+    const Headers = {
         'Set-cookie' : cookie.serialize('sessionID', _id, {
             httpOnly: false,
             maxAge: 60 * 60 * 24 * 7,
@@ -47,7 +55,7 @@ export async function post({body}) {
 
     return {
         status: 200,
-        headers,
+        Headers,
         body : {
             message: 'success'
         }

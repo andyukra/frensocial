@@ -181,7 +181,7 @@
             {#each item.comments as comentario}
                 <div class="comment" transition:rebotin>
                     <div class="author">
-                        {#if allUsers.filter(x=>x.username===comentario.author)[0].avatar}
+                        {#if allUsers.filter(x=>x.username===comentario.author)[0]?.avatar}
                             <img src={allUsers.filter(x=>x.username===comentario.author)[0].avatar} alt="author avatar">
                         {:else}
                             <i class="fas fa-user-circle"></i>
