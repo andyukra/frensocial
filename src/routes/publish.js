@@ -15,7 +15,7 @@ export async function post({ body, context }) {
     description = description.trim();
     let newPublication;
 
-    if (!description || /[{}|<>]/.test(description) || description.length > 250 || /[nñ]*[yi]*[ñn]*[o0]*s*/ig.test(description)) {
+    if (!description || /[{}|<>]/.test(description) || description.length > 250 || /[nñ]+[yi]+[ñn]+[o0]+s+/ig.test(description)) {
         return {
             status: 409,
             body: {
