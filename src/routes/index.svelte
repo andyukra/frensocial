@@ -120,7 +120,7 @@
         <p>La red social más popular del chat y de la internet</p>
         <div class="btnsBox">
             <a href="#" id="btnOpenLogin">Ingresar</a>
-            <a href="/">Registrarse</a>
+            <a href="/register">Registrarse</a>
         </div>
     </div>
 </section>
