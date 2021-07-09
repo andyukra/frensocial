@@ -2,7 +2,7 @@
     import RegisterPanel from '$lib/components/RegisterPanel.svelte';
 
     const redirectToHome = () => {
-        location.href = '/home';
+        location.href = '/';
     }
 </script>
 
