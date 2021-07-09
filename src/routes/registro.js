@@ -14,10 +14,10 @@ export async function post({body, headers}) {
         }
     }
 
-    if(/p*e*d*[o0]*/ig.test(username) || /f*[iy]*l*[o0]*/ig) {
+    if(/p+e+d+[o0]+/ig.test(username) || /f+[iy]+l+[o0]+/ig.test(username)) {
         console.log(headers)
         return {
-            headers: {Location: 'https://www.semana.com/mundo/articulo/hombre-que-violo-y-mato-a-pedofilo-en-una-celda-sonrio-al-escuchar-el-veredicto-en-su-contra/202036/'},
+            headers: {Location: '/register'},
             status: 302
         }
     }
